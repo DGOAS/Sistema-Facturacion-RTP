@@ -1,0 +1,478 @@
+<div class="detalle-cotizacion">
+
+  <!-- ENCABEZADO -->
+  <header class="encabezado">
+
+    <div class="encabezado-titulo">
+
+      <div class="icono-encabezado">
+        <span class="material-symbols-outlined">
+          request_quote
+        </span>
+      </div>
+
+      <div>
+        <h1>Detalle de Cotización</h1>
+        <p>
+          Consulta de información de la cotización y sus productos.
+        </p>
+      </div>
+
+    </div>
+
+    <button
+      type="button"
+      class="boton-volver"
+      onclick="history.back()">
+
+      <span class="material-symbols-outlined">
+        arrow_back
+      </span>
+
+      Volver
+
+    </button>
+
+  </header>
+
+
+  @if (cotizacion) {
+
+    <!-- INFORMACIÓN GENERAL -->
+    <section class="seccion">
+
+      <div class="seccion-titulo">
+
+        <div class="icono-seccion azul">
+          <span class="material-symbols-outlined">
+            info
+          </span>
+        </div>
+
+        <div>
+          <h2>Información general</h2>
+          <p>
+            Datos principales de la cotización comercial.
+          </p>
+        </div>
+
+      </div>
+
+
+      <div class="datos-generales">
+
+        <!-- NÚMERO DE COTIZACIÓN -->
+        <div class="dato">
+
+          <span>
+            N.° de cotización
+          </span>
+
+          <strong class="dato-principal">
+            {{ cotizacion.numero }}
+          </strong>
+
+        </div>
+
+
+        <!-- NÚMERO DE PREVENTA -->
+        <div class="dato">
+
+          <span>
+            N.° de preventa
+          </span>
+
+          <strong class="dato-link">
+            {{ cotizacion.preventa?.numero }}
+          </strong>
+
+        </div>
+
+
+        <!-- FECHA -->
+        <div class="dato">
+
+          <span>
+            Fecha
+          </span>
+
+          <strong>
+            {{ cotizacion.fecha }}
+          </strong>
+
+        </div>
+
+
+        <!-- CLIENTE -->
+        <div class="dato">
+
+          <span>
+            Cliente
+          </span>
+
+          <strong>
+            {{ cotizacion.preventa?.razonSocial }}
+          </strong>
+
+        </div>
+
+
+        <!-- RUC -->
+        <div class="dato">
+
+          <span>
+            R.U.C.
+          </span>
+
+          <strong>
+            {{ cotizacion.preventa?.ruc }}
+          </strong>
+
+        </div>
+
+
+        <!-- FORMA DE PAGO -->
+        <div class="dato">
+
+          <span>
+            Forma de pago
+          </span>
+
+          <strong class="etiqueta-tipo">
+
+            @if (
+              cotizacion.formaPago === 'C/E' ||
+              cotizacion.formaPago === 'CE'
+            ) {
+              C/E
+            }
+
+            @if (
+              cotizacion.formaPago === 'A/D' ||
+              cotizacion.formaPago === 'AD'
+            ) {
+              A/D (Adelanto)
+            }
+
+            @if (cotizacion.formaPago === 'FACTURA') {
+              Factura por cobrar
+            }
+
+            @if (cotizacion.formaPago === 'LETRA') {
+              Letra por cobrar
+            }
+
+          </strong>
+
+        </div>
+
+
+        <!-- PLAZO DE PAGO -->
+        @if (
+          cotizacion.formaPago === 'FACTURA' ||
+          cotizacion.formaPago === 'LETRA'
+        ) {
+
+          <div class="dato">
+
+            <span>
+              Plazo de pago
+            </span>
+
+            <strong>
+              {{ cotizacion.preventa?.plazoPago }} días
+            </strong>
+
+          </div>
+
+        }
+
+      </div>
+
+    </section>
+
+
+    <!-- PRODUCTOS -->
+    <section class="seccion">
+
+      <div class="seccion-titulo">
+
+        <div class="icono-seccion morado">
+          <span class="material-symbols-outlined">
+            inventory_2
+          </span>
+        </div>
+
+        <div>
+
+          <h2>
+            Productos
+          </h2>
+
+          <p>
+            Detalle de los repuestos incluidos en la cotización.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="tabla-contenedor">
+
+        <table>
+
+          <thead>
+
+            <tr>
+              <th>#</th>
+              <th>Código</th>
+              <th>Producto</th>
+              <th>Descripción</th>
+              <th>Cantidad</th>
+              <th>Precio unitario</th>
+              <th>Total</th>
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            @for (
+              detalle of cotizacion.detalles;
+              track detalle.idDetalleCotizacion;
+              let i = $index
+            ) {
+
+              <tr>
+
+                <td class="numero-fila">
+                  {{ i + 1 }}
+                </td>
+
+                <td>
+
+                  <span class="codigo">
+                    {{ detalle.producto.codigo }}
+                  </span>
+
+                </td>
+
+                <td>
+
+                  <strong class="nombre-producto">
+                    {{ detalle.producto.nombre }}
+                  </strong>
+
+                </td>
+
+                <td class="descripcion">
+                  {{ detalle.producto.descripcion }}
+                </td>
+
+                <td class="cantidad">
+                  {{ detalle.cantidad }}
+                </td>
+
+                <td class="importe">
+                  US$
+                  {{ detalle.precioUnitarioUsd | number:'1.2-2' }}
+                </td>
+
+                <td class="importe total-producto">
+                  US$
+                  {{ detalle.totalUsd | number:'1.2-2' }}
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+
+    <!-- PARTE INFERIOR -->
+    <div class="zona-inferior">
+
+
+      <!-- CONDICIONES -->
+      <section class="seccion condiciones">
+
+        <div class="seccion-titulo">
+
+          <div class="icono-seccion naranja">
+
+            <span class="material-symbols-outlined">
+              local_shipping
+            </span>
+
+          </div>
+
+          <div>
+
+            <h2>
+              Condiciones de la cotización
+            </h2>
+
+            <p>
+              Información complementaria de la operación.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="datos-condiciones">
+
+          <!-- TIPO DE VENTA -->
+          <div class="dato">
+
+            <span>
+              Tipo de venta
+            </span>
+
+            <strong class="etiqueta-tipo">
+              {{ cotizacion.preventa?.tipoVenta }}
+            </strong>
+
+          </div>
+
+
+          <!-- TRANSPORTE -->
+          <div class="dato">
+
+            <span>
+              Transporte
+            </span>
+
+            <strong>
+              {{ cotizacion.preventa?.transporte }}
+            </strong>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- RESUMEN FINANCIERO -->
+      <section class="seccion resumen">
+
+        <div class="seccion-titulo">
+
+          <div class="icono-seccion verde">
+
+            <span class="material-symbols-outlined">
+              calculate
+            </span>
+
+          </div>
+
+          <div>
+
+            <h2>
+              Resumen financiero
+            </h2>
+
+            <p>
+              Detalle de los importes de la operación.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <!-- MONEDA -->
+        <div class="fila-resumen">
+
+          <span>
+            Moneda
+          </span>
+
+          <strong>
+            USD (US$)
+          </strong>
+
+        </div>
+
+
+        <!-- SUBTOTAL -->
+        <div class="fila-resumen">
+
+          <span>
+            Subtotal
+          </span>
+
+          <strong>
+            US$
+            {{ cotizacion.subtotalUsd | number:'1.2-2' }}
+          </strong>
+
+        </div>
+
+
+        <!-- IGV -->
+        <div class="fila-resumen">
+
+          <span>
+            IGV (18%)
+          </span>
+
+          <strong>
+            US$
+            {{ cotizacion.igvUsd | number:'1.2-2' }}
+          </strong>
+
+        </div>
+
+
+        <!-- TOTAL -->
+        <div class="total-final">
+
+          <span>
+            TOTAL
+          </span>
+
+          <strong>
+            US$
+            {{ cotizacion.totalUsd | number:'1.2-2' }}
+          </strong>
+
+        </div>
+
+      </section>
+
+    </div>
+
+
+    <!-- ACCIONES -->
+    <section class="acciones">
+
+      <button
+        type="button"
+        class="boton-principal"
+        (click)="descargarPdf()">
+
+        <span class="material-symbols-outlined">
+          picture_as_pdf
+        </span>
+
+        Descargar PDF
+
+      </button>
+
+    </section>
+
+  }
+
+</div>

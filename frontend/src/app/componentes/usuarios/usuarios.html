@@ -1,0 +1,451 @@
+<div class="perfil-container">
+
+  <!-- ENCABEZADO -->
+  <header class="perfil-header">
+
+    <div>
+      <h1>MI PERFIL</h1>
+      <p>Consulta y administra tus datos personales.</p>
+    </div>
+
+    <div class="ruta">
+      <span>Inicio</span>
+      <span class="material-symbols-outlined">chevron_right</span>
+      <span>Usuarios</span>
+      <span class="material-symbols-outlined">chevron_right</span>
+      <strong>Mi perfil</strong>
+    </div>
+
+  </header>
+
+
+  @if (cargando) {
+
+    <!-- CARGANDO -->
+    <div class="mensaje-cargando">
+
+      <span class="material-symbols-outlined">
+        progress_activity
+      </span>
+
+      <p>Cargando información del usuario...</p>
+
+    </div>
+
+  } @else {
+
+    <!-- RESUMEN DEL PERFIL -->
+    <section class="resumen-perfil">
+
+      <div class="perfil-identidad">
+
+        <div class="avatar-perfil">
+          <span class="material-symbols-outlined">
+            person
+          </span>
+        </div>
+
+        <div class="identidad-datos">
+
+          <h2>
+            {{ perfil.nombres }} {{ perfil.apellidos }}
+          </h2>
+
+          <span class="badge-rol">
+            {{ perfil.rol }}
+          </span>
+
+          <p>
+            Usuario: {{ perfil.usuario }}
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="resumen-separador"></div>
+
+
+      <div class="dato-resumen">
+
+        <div class="icono-resumen azul">
+          <span class="material-symbols-outlined">
+            badge
+          </span>
+        </div>
+
+        <div>
+          <strong>Usuario</strong>
+          <span>{{ perfil.usuario }}</span>
+        </div>
+
+      </div>
+
+
+      <div class="dato-resumen">
+
+        <div class="icono-resumen verde">
+          <span class="material-symbols-outlined">
+            verified_user
+          </span>
+        </div>
+
+        <div>
+          <strong>Estado</strong>
+          <span class="estado-activo">
+            Activo
+          </span>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="perfil-grid">
+
+      <!-- COLUMNA PRINCIPAL -->
+      <div class="perfil-principal">
+
+        <!-- DATOS PERSONALES -->
+        <section class="seccion">
+
+          <div class="seccion-titulo">
+
+            <div class="icono-seccion">
+              <span class="material-symbols-outlined">
+                person
+              </span>
+            </div>
+
+            <div>
+              <h2>Datos personales</h2>
+              <p>
+                Información del usuario que inició sesión.
+              </p>
+            </div>
+
+          </div>
+
+
+          <div class="formulario">
+
+            <div class="campo">
+
+              <label for="nombres">
+                Nombres
+              </label>
+
+              <input
+                id="nombres"
+                type="text"
+                [(ngModel)]="perfil.nombres">
+
+            </div>
+
+
+            <div class="campo">
+
+              <label for="apellidos">
+                Apellidos
+              </label>
+
+              <input
+                id="apellidos"
+                type="text"
+                [(ngModel)]="perfil.apellidos">
+
+            </div>
+
+
+            <div class="campo">
+
+              <label for="dni">
+                DNI
+              </label>
+
+              <input
+                id="dni"
+                type="text"
+                maxlength="8"
+                [(ngModel)]="perfil.dni">
+
+            </div>
+
+
+            <div class="campo">
+              <label for="telefono">Teléfono</label>
+
+              <input
+                id="telefono"
+                type="text"
+                maxlength="9"
+                [(ngModel)]="perfil.telefono"
+                placeholder="Ingrese el teléfono">
+            </div>
+
+
+            <div class="campo">
+
+              <label for="usuario">
+                Usuario
+              </label>
+
+              <input
+                id="usuario"
+                type="text"
+                [value]="perfil.usuario"
+                readonly>
+
+            </div>
+
+
+            <div class="campo">
+
+              <label for="rol">
+                Rol
+              </label>
+
+              <input
+                id="rol"
+                type="text"
+                [value]="perfil.rol"
+                readonly>
+
+            </div>
+
+          </div>
+
+
+          <div class="acciones">
+
+            <button
+              type="button"
+              class="boton-principal"
+              (click)="actualizarPerfil()"
+              [disabled]="guardando">
+
+              <span class="material-symbols-outlined">
+                save
+              </span>
+
+              @if (guardando) {
+                Guardando...
+              } @else {
+                Guardar cambios
+              }
+
+            </button>
+
+          </div>
+
+        </section>
+
+
+        <!-- CAMBIAR CONTRASEÑA -->
+        <section class="seccion">
+
+          <div class="seccion-titulo">
+
+            <div class="icono-seccion icono-seguridad">
+              <span class="material-symbols-outlined">
+                lock
+              </span>
+            </div>
+
+            <div>
+              <h2>Cambiar contraseña</h2>
+              <p>
+                Actualiza la contraseña de tu cuenta.
+              </p>
+            </div>
+
+          </div>
+
+
+          <div class="formulario-password">
+
+            <div class="campo">
+
+              <label for="nuevaPassword">
+                Nueva contraseña
+              </label>
+
+              <input
+                id="nuevaPassword"
+                type="password"
+                [(ngModel)]="nuevaPassword"
+                placeholder="Ingrese nueva contraseña">
+
+            </div>
+
+
+            <div class="campo">
+
+              <label for="confirmarPassword">
+                Confirmar contraseña
+              </label>
+
+              <input
+                id="confirmarPassword"
+                type="password"
+                [(ngModel)]="confirmarPassword"
+                placeholder="Repita la nueva contraseña">
+
+            </div>
+
+          </div>
+
+
+          <div class="seguridad-info">
+
+            <span class="material-symbols-outlined">
+              info
+            </span>
+
+            <span>
+              Recuerda utilizar una contraseña segura para proteger tu cuenta.
+            </span>
+
+          </div>
+
+
+          <div class="acciones">
+
+            <button
+              type="button"
+              class="boton-principal boton-seguridad"
+              (click)="cambiarPassword()"
+              [disabled]="cambiandoPassword">
+
+              <span class="material-symbols-outlined">
+                key
+              </span>
+
+              @if (cambiandoPassword) {
+                Actualizando...
+              } @else {
+                Cambiar contraseña
+              }
+
+            </button>
+
+          </div>
+
+        </section>
+
+      </div>
+
+
+      <!-- COLUMNA LATERAL -->
+      <aside class="perfil-lateral">
+
+        <!-- INFORMACIÓN DE CUENTA -->
+        <section class="tarjeta-lateral">
+
+          <div class="lateral-titulo">
+
+            <div class="icono-lateral">
+              <span class="material-symbols-outlined">
+                account_circle
+              </span>
+            </div>
+
+            <div>
+              <h3>Información de la cuenta</h3>
+              <p>Datos de tu cuenta en el sistema.</p>
+            </div>
+
+          </div>
+
+
+          <div class="informacion-cuenta">
+
+            <div class="fila-cuenta">
+
+              <span>Usuario</span>
+
+              <strong>
+                {{ perfil.usuario }}
+              </strong>
+
+            </div>
+
+
+            <div class="fila-cuenta">
+
+              <span>Rol</span>
+
+              <span class="badge-rol badge-lateral">
+                {{ perfil.rol }}
+              </span>
+
+            </div>
+
+
+            <div class="fila-cuenta">
+
+              <span>Estado</span>
+
+              <span class="estado">
+
+                <span class="punto-estado"></span>
+
+                Activo
+
+              </span>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- SEGURIDAD -->
+        <section class="tarjeta-lateral seguridad-card">
+
+          <div class="lateral-titulo">
+
+            <div class="icono-lateral seguridad">
+              <span class="material-symbols-outlined">
+                shield
+              </span>
+            </div>
+
+            <div>
+              <h3>Seguridad</h3>
+              <p>Protección de tu cuenta.</p>
+            </div>
+
+          </div>
+
+
+          <div class="seguridad-contenido">
+
+            <span class="material-symbols-outlined">
+              verified_user
+            </span>
+
+            <strong>
+              Cuenta protegida
+            </strong>
+
+            <p>
+              Tu cuenta utiliza autenticación segura para proteger
+              tus credenciales.
+            </p>
+
+          </div>
+
+        </section>
+
+      </aside>
+
+    </div>
+
+  }
+
+</div>

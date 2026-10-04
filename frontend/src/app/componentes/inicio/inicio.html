@@ -1,0 +1,151 @@
+<div class="inicio">
+
+  <!-- CARRUSEL / PORTADA -->
+  <section class="carrusel">
+
+    <div class="carrusel-contenido">
+
+      <h1>
+        {{ slides[slideActual].titulo }}
+      </h1>
+
+      <h2>
+        {{ slides[slideActual].subtitulo }}
+      </h2>
+
+      <p>
+        {{ slides[slideActual].descripcion }}
+      </p>
+
+    </div>
+
+
+    <div class="carrusel-imagen">
+
+      <img
+        [src]="slides[slideActual].imagen"
+        [alt]="slides[slideActual].titulo"
+      >
+
+    </div>
+
+
+    <!-- BOTÓN ANTERIOR -->
+    <button
+      type="button"
+      class="carrusel-anterior"
+      (click)="anteriorSlide()"
+      aria-label="Slide anterior">
+      ‹
+    </button>
+
+
+    <!-- BOTÓN SIGUIENTE -->
+    <button
+      type="button"
+      class="carrusel-siguiente"
+      (click)="siguienteSlide()"
+      aria-label="Slide siguiente">
+      ›
+    </button>
+
+
+    <!-- INDICADORES -->
+    <div class="carrusel-indicadores">
+
+      @for (slide of slides; track $index) {
+
+        <button
+          type="button"
+          [class.activo]="$index === slideActual"
+          (click)="slideActual = $index"
+          [attr.aria-label]="'Ir al slide ' + ($index + 1)">
+        </button>
+
+      }
+
+    </div>
+
+  </section>
+
+
+  <!-- CONÓCENOS -->
+  <section class="nosotros">
+
+    <div class="nosotros-texto">
+
+      <span>CONÓCENOS</span>
+
+      <h2>RTP Repuestos</h2>
+
+      <p>
+        RTP Repuestos es una empresa dedicada a la comercialización
+        de repuestos automotrices, orientada a brindar productos
+        y soluciones para las necesidades del sector automotriz.
+      </p>
+
+      <p>
+        Contamos con un equipo de profesionales capacitados para
+        brindar asesoramiento y soporte a nuestros clientes, con
+        el objetivo de garantizar la satisfacción y confianza en
+        nuestros productos y servicios.
+      </p>
+
+    </div>
+
+
+    <!-- CARACTERÍSTICAS -->
+    <div class="nosotros-caracteristicas">
+
+      <div class="caracteristica">
+
+        <span class="material-symbols-outlined">
+          verified
+        </span>
+
+        <h3>Calidad y garantía</h3>
+
+        <p>
+          Productos seleccionados para brindar soluciones
+          confiables a nuestros clientes.
+        </p>
+
+      </div>
+
+
+      <div class="caracteristica">
+
+        <span class="material-symbols-outlined">
+          inventory_2
+        </span>
+
+        <h3>Amplia variedad</h3>
+
+        <p>
+          Repuestos destinados a diferentes necesidades
+          del sector automotriz.
+        </p>
+
+      </div>
+
+
+      <div class="caracteristica">
+
+        <span class="material-symbols-outlined">
+          settings
+        </span>
+
+        <h3>Gestión eficiente</h3>
+
+        <p>
+          Información organizada para facilitar la gestión
+          comercial y el seguimiento de las operaciones.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</div>

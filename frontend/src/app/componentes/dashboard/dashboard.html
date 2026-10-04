@@ -1,0 +1,367 @@
+<div class="dashboard">
+
+  <!-- ENCABEZADO -->
+
+  <header class="encabezado">
+
+    <div>
+
+      <h1>Dashboard</h1>
+
+      <p>
+        Resumen general de RTP Repuestos
+      </p>
+
+    </div>
+
+  </header>
+
+
+  @if (cargando) {
+
+    <div class="cargando">
+
+      Cargando información del sistema...
+
+    </div>
+
+  } @else {
+
+
+    <!-- TARJETAS DE RESUMEN -->
+
+    <section class="estadisticas">
+
+
+      <div class="tarjeta">
+
+        <div class="icono-tarjeta">
+
+          <span class="material-symbols-outlined">
+            payments
+          </span>
+
+        </div>
+
+        <h3>
+          US$ {{ formatearMonto(valorTotalPreventas) }}
+        </h3>
+
+        <p>
+          Valor total de preventas
+        </p>
+
+      </div>
+
+
+      <div class="tarjeta">
+
+        <div class="icono-tarjeta">
+
+          <span class="material-symbols-outlined">
+            description
+          </span>
+
+        </div>
+
+        <h3>
+          {{ totalPreventas }}
+        </h3>
+
+        <p>
+          Preventas registradas
+        </p>
+
+      </div>
+
+
+      <div class="tarjeta">
+
+        <div class="icono-tarjeta">
+
+          <span class="material-symbols-outlined">
+            request_quote
+          </span>
+
+        </div>
+
+        <h3>
+          {{ totalCotizaciones }}
+        </h3>
+
+        <p>
+          Cotizaciones generadas
+        </p>
+
+      </div>
+
+
+      <div class="tarjeta">
+
+        <div class="icono-tarjeta">
+
+          <span class="material-symbols-outlined">
+            people
+          </span>
+
+        </div>
+
+        <h3>
+          {{ totalClientes }}
+        </h3>
+
+        <p>
+          Clientes registrados
+        </p>
+
+      </div>
+
+
+    </section>
+
+
+
+    <!-- PREVENTAS POR MES -->
+
+    <section class="grafico">
+
+      <div class="grafico-encabezado">
+
+        <div>
+
+          <h2>
+            Preventas por mes
+          </h2>
+
+          <p>
+            Cantidad de preventas registradas durante el año
+          </p>
+
+        </div>
+
+        <span class="material-symbols-outlined icono-grafico">
+          bar_chart
+        </span>
+
+      </div>
+
+
+      <div class="grafico-contenedor">
+
+        <canvas #graficoPreventas></canvas>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- INFORMACIÓN INFERIOR -->
+
+    <section class="informacion">
+
+
+      <!-- ÚLTIMAS PREVENTAS -->
+
+      <div class="panel">
+
+        <div class="panel-encabezado">
+
+          <div>
+
+            <h2>
+              Últimas preventas
+            </h2>
+
+            <p>
+              Operaciones comerciales recientes
+            </p>
+
+          </div>
+
+          <span class="material-symbols-outlined">
+            receipt_long
+          </span>
+
+        </div>
+
+
+        @if (ultimasPreventas.length === 0) {
+
+          <div class="sin-datos">
+
+            <span class="material-symbols-outlined">
+              inbox
+            </span>
+
+            <p>
+              No hay preventas registradas.
+            </p>
+
+          </div>
+
+        } @else {
+
+          <div class="tabla-contenedor">
+
+            <table>
+
+              <thead>
+
+                <tr>
+
+                  <th>
+                    Preventa
+                  </th>
+
+                  <th>
+                    Cliente
+                  </th>
+
+                  <th>
+                    Fecha
+                  </th>
+
+                  <th>
+                    Total
+                  </th>
+
+                </tr>
+
+              </thead>
+
+
+              <tbody>
+
+                @for (
+                  preventa of ultimasPreventas;
+                  track preventa.idPreventa
+                ) {
+
+                  <tr>
+
+                    <td>
+
+                      <strong>
+                        {{ preventa.numero }}
+                      </strong>
+
+                    </td>
+
+                    <td>
+                      {{ preventa.razonSocial }}
+                    </td>
+
+                    <td>
+                      {{ formatearFecha(preventa.fecha) }}
+                    </td>
+
+                    <td>
+
+                      <strong class="monto">
+                        US$
+                        {{ formatearMonto(preventa.totalUsd) }}
+                      </strong>
+
+                    </td>
+
+                  </tr>
+
+                }
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        }
+
+      </div>
+
+
+
+      <!-- PRODUCTOS MÁS SOLICITADOS -->
+
+      <div class="panel">
+
+        <div class="panel-encabezado">
+
+          <div>
+
+            <h2>
+              Productos más solicitados
+            </h2>
+
+            <p>
+              Productos con mayor cantidad solicitada
+            </p>
+
+          </div>
+
+          <span class="material-symbols-outlined">
+            inventory_2
+          </span>
+
+        </div>
+
+
+        @if (productosMasSolicitados.length === 0) {
+
+          <div class="sin-datos">
+
+            <span class="material-symbols-outlined">
+              inventory
+            </span>
+
+            <p>
+              No hay datos disponibles.
+            </p>
+
+          </div>
+
+        } @else {
+
+          @for (
+            producto of productosMasSolicitados;
+            track producto.codigo
+          ) {
+
+            <div class="producto">
+
+              <div class="producto-info">
+
+                <span title="{{ producto.nombre }}">
+                  {{ producto.nombre }}
+                </span>
+
+                <strong>
+                  {{ producto.cantidad }}
+                </strong>
+
+              </div>
+
+
+              <div class="barra">
+
+                <div
+                  class="barra-progreso"
+                  [style.width.%]="producto.porcentaje">
+                </div>
+
+              </div>
+
+            </div>
+
+          }
+
+        }
+
+      </div>
+
+
+    </section>
+
+  }
+
+</div>

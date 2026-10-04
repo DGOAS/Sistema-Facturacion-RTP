@@ -1,0 +1,452 @@
+<div class="clientes">
+
+  <!-- ENCABEZADO -->
+
+  <header class="encabezado">
+
+    <div class="encabezado-texto">
+
+      <h1>Clientes</h1>
+
+      <p>
+        Gestión de clientes de RTP Repuestos
+      </p>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="boton-nuevo"
+      (click)="abrirFormulario()">
+
+      <span class="material-symbols-outlined">
+        person_add
+      </span>
+
+      <span>Nuevo cliente</span>
+
+    </button>
+
+  </header>
+
+
+  <!-- FORMULARIO -->
+
+  @if (mostrarFormulario) {
+
+    <section class="formulario">
+
+      <div class="formulario-encabezado">
+
+        <div class="titulo-formulario">
+
+          <div class="icono-formulario">
+
+            <span class="material-symbols-outlined">
+              person_add
+            </span>
+
+          </div>
+
+          <div>
+
+            <h2>
+              {{ editando ? 'Editar cliente' : 'Registrar cliente' }}
+            </h2>
+
+            <p>
+              {{ editando
+                ? 'Actualiza la información del cliente.'
+                : 'Ingresa los datos del nuevo cliente.'
+              }}
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="boton-cerrar"
+          (click)="cancelarFormulario()"
+          title="Cerrar">
+
+          <span class="material-symbols-outlined">
+            close
+          </span>
+
+        </button>
+
+      </div>
+
+
+      <div class="formulario-contenido">
+
+        <div class="formulario-grid">
+
+          <!-- RAZÓN SOCIAL -->
+
+          <div class="campo">
+
+            <label for="razonSocial">
+              Razón Social <span>*</span>
+            </label>
+
+            <input
+              id="razonSocial"
+              type="text"
+              placeholder="Ingrese la razón social"
+              [(ngModel)]="clienteSeleccionado.razonSocial">
+
+          </div>
+
+
+          <!-- RUC -->
+
+          <div class="campo">
+
+            <label for="ruc">
+              R.U.C. <span>*</span>
+            </label>
+
+            <input
+              id="ruc"
+              type="text"
+              inputmode="numeric"
+              maxlength="11"
+              placeholder="Ingrese el RUC"
+              [(ngModel)]="clienteSeleccionado.ruc"
+              (ngModelChange)="limpiarRuc($event)">
+
+          </div>
+
+
+          <!-- TELÉFONO -->
+
+          <div class="campo">
+
+            <label for="telefono">
+              Teléfono
+            </label>
+
+            <input
+              id="telefono"
+              type="text"
+              inputmode="numeric"
+              maxlength="9"
+              placeholder="Ingrese el teléfono"
+              [(ngModel)]="clienteSeleccionado.telefono"
+              (ngModelChange)="limpiarTelefono($event)">
+
+          </div>
+
+
+          <!-- DIRECCIÓN -->
+
+          <div class="campo">
+
+            <label for="direccion">
+              Dirección
+            </label>
+
+            <input
+              id="direccion"
+              type="text"
+              placeholder="Ingrese la dirección"
+              [(ngModel)]="clienteSeleccionado.direccion">
+
+          </div>
+
+
+          <!-- URBANIZACIÓN -->
+
+          <div class="campo">
+
+            <label for="urbanizacion">
+              Urbanización
+            </label>
+
+            <input
+              id="urbanizacion"
+              type="text"
+              placeholder="Ingrese la urbanización"
+              [(ngModel)]="clienteSeleccionado.urbanizacion">
+
+          </div>
+
+
+          <!-- DISTRITO -->
+
+          <div class="campo">
+
+            <label for="distrito">
+              Distrito
+            </label>
+
+            <input
+              id="distrito"
+              type="text"
+              placeholder="Ingrese el distrito"
+              [(ngModel)]="clienteSeleccionado.distrito">
+
+          </div>
+
+        </div>
+
+
+        <!-- ACCIONES -->
+
+        <div class="acciones-formulario">
+
+          <button
+            type="button"
+            class="boton-cancelar"
+            (click)="cancelarFormulario()">
+
+            Cancelar
+
+          </button>
+
+
+          <button
+            type="button"
+            class="boton-guardar"
+            (click)="guardarCliente()">
+
+            <span class="material-symbols-outlined">
+              save
+            </span>
+
+            {{ editando ? 'Actualizar cliente' : 'Guardar cliente' }}
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  }
+
+
+  <!-- LISTA DE CLIENTES -->
+
+  <section class="lista-clientes">
+
+    <!-- ENCABEZADO DE LISTA -->
+
+    <div class="lista-encabezado">
+
+      <div class="lista-titulo">
+
+        <div class="icono-lista">
+
+          <span class="material-symbols-outlined">
+            groups
+          </span>
+
+        </div>
+
+        <div>
+
+          <h2>Lista de clientes</h2>
+
+          <p>
+            Clientes registrados en el sistema
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="contador-clientes">
+
+        <strong>
+          {{ clientes.length }}
+        </strong>
+
+        <span>
+          {{ clientes.length === 1 ? 'cliente' : 'clientes' }}
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- SIN CLIENTES -->
+
+    @if (clientes.length === 0) {
+
+      <div class="sin-clientes">
+
+        <div class="icono-sin-clientes">
+
+          <span class="material-symbols-outlined">
+            group_off
+          </span>
+
+        </div>
+
+        <h3>
+          No hay clientes registrados
+        </h3>
+
+        <p>
+          Registra tu primer cliente para comenzar.
+        </p>
+
+        <button
+          type="button"
+          (click)="abrirFormulario()">
+
+          <span class="material-symbols-outlined">
+            person_add
+          </span>
+
+          Registrar primer cliente
+
+        </button>
+
+      </div>
+
+    } @else {
+
+      <!-- TABLA -->
+
+      <div class="tabla-contenedor">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                R.U.C.
+              </th>
+
+              <th>
+                Razón Social
+              </th>
+
+              <th>
+                Teléfono
+              </th>
+
+              <th>
+                Dirección
+              </th>
+
+              <th>
+                Distrito
+              </th>
+
+              <th class="columna-acciones">
+                Acciones
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            @for (
+              cliente of clientes;
+              track cliente.idCliente
+            ) {
+
+              <tr>
+
+                <td class="ruc">
+                  {{ cliente.ruc }}
+                </td>
+
+
+                <td class="razon-social">
+                  {{ cliente.razonSocial }}
+                </td>
+
+
+                <td>
+                  {{ cliente.telefono || '-' }}
+                </td>
+
+
+                <td>
+                  {{ cliente.direccion || '-' }}
+                </td>
+
+
+                <td>
+                  {{ cliente.distrito || '-' }}
+                </td>
+
+
+                <td class="acciones">
+
+                  <!-- EDITAR -->
+
+                  <button
+                    type="button"
+                    class="boton-accion editar"
+                    title="Editar cliente"
+                    (click)="editarCliente(cliente)">
+
+                    <span class="material-symbols-outlined">
+                      edit
+                    </span>
+
+                  </button>
+
+
+                  <!-- DESACTIVAR -->
+
+                  <button
+                    type="button"
+                    class="boton-accion desactivar"
+                    title="Desactivar cliente"
+                    (click)="eliminarCliente(cliente)">
+
+                    <span class="material-symbols-outlined">
+                      person_off
+                    </span>
+
+                  </button>
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <!-- PIE DE TABLA -->
+
+      <div class="pie-lista">
+
+        <span>
+          Mostrando
+          <strong>{{ clientes.length }}</strong>
+          {{ clientes.length === 1 ? 'cliente' : 'clientes' }}
+        </span>
+
+      </div>
+
+    }
+
+  </section>
+
+</div>

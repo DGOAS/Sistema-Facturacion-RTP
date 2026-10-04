@@ -1,0 +1,24 @@
+/* ================================
+   TEMA GLOBAL
+   ================================ */
+
+:root {
+  --fondo: #ffffff;
+  --fondo-secundario: #f5f5f5;
+  --fondo-tarjeta: #ffffff;
+  --texto: #222222;
+  --texto-secundario: #666666;
+  --borde: #dddddd;
+  --sidebar: #ffffff;
+}
+
+
+/* Aplicación global */
+
+body {
+  margin: 0;
+  background-color: var(--fondo);
+  color: var(--texto);
+  font-family: Arial, sans-serif;
+  transition: background-color 0.3s, color 0.3s;
+}/* You can add global styles to this file, and also import other style files */

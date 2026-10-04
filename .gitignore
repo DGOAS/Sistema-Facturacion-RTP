@@ -1,0 +1,16 @@
+# Angular / Node
+frontend/node_modules/
+frontend/.angular/
+frontend/dist/
+frontend/coverage/
+
+# Spring Boot / Maven
+backend/target/
+
+# IDEs
+.vscode/
+.idea/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db

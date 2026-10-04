@@ -1,0 +1,219 @@
+<div class="login-pagina">
+
+  <div class="login-card">
+
+    <!-- PANEL IZQUIERDO -->
+
+    <section class="login-presentacion">
+
+      <div class="presentacion-contenido">
+
+        <!-- LOGO -->
+
+        <div class="logo-login">
+
+          <div class="logo-icono">
+            <span class="material-symbols-outlined">
+              settings
+            </span>
+          </div>
+
+          <div class="logo-texto">
+
+            <strong>RTP</strong>
+
+            <span>REPUESTOS</span>
+
+          </div>
+
+        </div>
+
+
+        <!-- TEXTO PRINCIPAL -->
+
+        <div class="presentacion-texto">
+
+        <h1>
+          Gestión de
+          <span>
+            Preventas y<br>
+            Cotizaciones
+          </span>
+        </h1>
+
+        <div class="linea-azul"></div>
+
+      </div>
+
+
+        <!-- CARACTERÍSTICAS -->
+
+        <div class="caracteristicas">
+
+          <div class="caracteristica">
+
+            <span class="material-symbols-outlined">
+              local_shipping
+            </span>
+
+            <span>
+              Amplia<br>
+              variedad
+            </span>
+
+          </div>
+
+
+          <div class="separador"></div>
+
+
+          <div class="caracteristica">
+
+            <span class="material-symbols-outlined">
+              verified_user
+            </span>
+
+            <span>
+              Repuestos<br>
+              originales
+            </span>
+
+          </div>
+
+
+          <div class="separador"></div>
+
+
+          <div class="caracteristica">
+
+            <span class="material-symbols-outlined">
+              settings
+            </span>
+
+            <span>
+              Soluciones<br>
+              para tu negocio
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- PANEL DERECHO -->
+
+    <section class="login-formulario">
+
+      <div class="formulario-contenido">
+
+        <!-- ICONO -->
+
+        <div class="icono-bienvenida">
+
+          <span class="material-symbols-outlined">
+            settings
+          </span>
+
+        </div>
+
+
+        <!-- TÍTULO -->
+
+        <h2>
+          Bienvenido a<br>
+          RTP Repuestos
+        </h2>
+
+        
+
+        <!-- FORMULARIO -->
+
+        <div class="campo-login">
+          
+          <label for="usuario">
+            Usuario
+          </label>
+          
+          <div class="input-con-icono">
+          
+            <span class="material-symbols-outlined">
+              person
+            </span>
+
+            <input
+              id="usuario"
+              type="text"
+              placeholder="Ingresa tu usuario"
+              [(ngModel)]="usuario">
+
+          </div>
+
+        </div>
+
+
+        <div class="campo-login">
+
+          <label for="password">
+            Contraseña
+          </label>
+
+          <div class="input-con-icono">
+
+            <span class="material-symbols-outlined">
+              lock
+            </span>
+
+            <input
+              id="password"
+              type="password"
+              placeholder="Ingresa tu contraseña"
+              [(ngModel)]="password">
+
+          </div>
+
+        </div>
+
+
+        <!-- BOTÓN -->
+
+        <button
+          type="button"
+          class="boton-ingresar"
+          (click)="ingresar()">
+
+          <span>Ingresar</span>
+
+          <span class="material-symbols-outlined">
+            arrow_forward
+          </span>
+
+        </button>
+
+
+        
+        <!-- SEGURIDAD -->
+
+        <div class="seguridad-login">
+
+          <span class="material-symbols-outlined">
+            verified_user
+          </span>
+
+          <p>
+            Tu información está protegida y es de uso exclusivo
+            del sistema.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</div>

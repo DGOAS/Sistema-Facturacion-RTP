@@ -1,0 +1,283 @@
+<div class="contenedor-productos">
+
+  <header class="encabezado">
+
+    <div>
+      <h1>PRODUCTOS</h1>
+
+      <p>
+        Catálogo de repuestos disponibles para las preventas.
+      </p>
+    </div>
+
+  </header>
+
+
+  @if (cargando) {
+
+    <div class="estado">
+
+      <span class="material-symbols-outlined">
+        hourglass_empty
+      </span>
+
+      <p>
+        Cargando catálogo de productos...
+      </p>
+
+    </div>
+
+  } @else {
+
+    <section class="buscador">
+
+      <div class="campo-busqueda">
+
+        <label for="buscarProducto">
+          Buscar producto
+        </label>
+
+        <div class="input-busqueda">
+
+          <span class="material-symbols-outlined">
+            search
+          </span>
+
+          <input
+            id="buscarProducto"
+            type="text"
+            [(ngModel)]="textoBusqueda"
+            (input)="buscarProductos()"
+            placeholder="Código, nombre, descripción o marca">
+
+        </div>
+
+      </div>
+
+
+      <div class="campo-cantidad">
+
+        <label for="productosPorPagina">
+          Mostrar
+        </label>
+
+        <select
+          id="productosPorPagina"
+          [(ngModel)]="productosPorPagina"
+          (change)="cambiarProductosPorPagina()">
+
+          <option [ngValue]="10">10</option>
+          <option [ngValue]="20">20</option>
+          <option [ngValue]="30">30</option>
+          <option [ngValue]="50">50</option>
+
+        </select>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="boton-limpiar"
+        (click)="limpiarBusqueda()">
+
+        <span class="material-symbols-outlined">
+          filter_alt_off
+        </span>
+
+        Limpiar
+
+      </button>
+
+    </section>
+
+
+    <section class="catalogo">
+
+      <div class="cabecera-catalogo">
+
+        <div>
+
+          <h2>Catálogo de repuestos</h2>
+
+          <p>
+            Consulta los precios y la información de los repuestos disponibles.
+          </p>
+
+        </div>
+
+        <span class="contador">
+          {{ productosFiltrados.length }} productos
+        </span>
+
+      </div>
+
+
+      @if (productosFiltrados.length === 0) {
+
+        <div class="estado">
+
+          <span class="material-symbols-outlined">
+            search_off
+          </span>
+
+          <p>
+            No se encontraron productos con la búsqueda realizada.
+          </p>
+
+        </div>
+
+      } @else {
+
+        <div class="tabla-contenedor">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>Código</th>
+                <th>Producto</th>
+                <th>Marca</th>
+                <th>Descripción</th>
+                <th>Precio USD</th>
+                <th>Precio PEN</th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              @for (
+                producto of productosPagina;
+                track producto.idProducto
+              ) {
+
+                <tr>
+
+                  <td>
+
+                    <strong>
+                      {{ producto.codigo }}
+                    </strong>
+
+                    @if (producto.codigoAnterior) {
+
+                      <small>
+                        Ant.: {{ producto.codigoAnterior }}
+                      </small>
+
+                    }
+
+                  </td>
+
+
+                  <td>
+                    {{ producto.nombre }}
+                  </td>
+
+
+                  <td>
+                    {{ producto.marca }}
+                  </td>
+
+
+                  <td>
+                    {{ producto.descripcion }}
+                  </td>
+
+
+                  <td class="precio">
+                    US$ {{ producto.precioUsd | number:'1.2-2' }}
+                  </td>
+
+
+                  <td class="precio">
+                    S/ {{ producto.precioPen | number:'1.2-2' }}
+                  </td>
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+
+        <div class="paginacion">
+
+          <button
+            type="button"
+            class="boton-pagina"
+            [disabled]="paginaActual === 1"
+            (click)="paginaAnterior()">
+
+            ← Anterior
+
+          </button>
+
+
+          <div class="numeros-pagina">
+
+            @for (
+              pagina of obtenerPaginasVisibles();
+              track pagina
+            ) {
+
+              <button
+                type="button"
+                class="numero-pagina"
+                [class.pagina-activa]="pagina === paginaActual"
+                (click)="irAPagina(pagina)">
+
+                {{ pagina }}
+
+              </button>
+
+            }
+
+          </div>
+
+
+          <button
+            type="button"
+            class="boton-pagina"
+            [disabled]="paginaActual === obtenerTotalPaginas()"
+            (click)="paginaSiguiente()">
+
+            Siguiente →
+
+          </button>
+
+        </div>
+
+
+        <div class="informacion-pagina">
+
+          Mostrando
+          {{ ((paginaActual - 1) * productosPorPagina) + 1 }}
+          -
+          {{
+            Math.min(
+              paginaActual * productosPorPagina,
+              productosFiltrados.length
+            )
+          }}
+          de
+          {{ productosFiltrados.length }} productos
+
+        </div>
+
+      }
+
+    </section>
+
+  }
+
+</div>

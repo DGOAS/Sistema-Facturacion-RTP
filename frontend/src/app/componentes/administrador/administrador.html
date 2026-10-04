@@ -1,0 +1,593 @@
+<div class="administrador-container">
+
+  <!-- ENCABEZADO -->
+
+  <header class="encabezado-administrador">
+
+    <div class="encabezado-texto">
+
+      <h1>Administración de Usuarios</h1>
+
+      <p>
+        Gestiona los usuarios y sus permisos del sistema.
+      </p>
+
+    </div>
+
+
+    @if (!mostrarFormulario) {
+
+      <button
+        type="button"
+        class="boton-nuevo"
+        (click)="abrirNuevoUsuario()">
+
+        <span class="material-symbols-outlined">
+          person_add
+        </span>
+
+        Nuevo usuario
+
+      </button>
+
+    }
+
+  </header>
+
+
+  <!-- FORMULARIO -->
+
+  @if (mostrarFormulario) {
+
+    <section class="formulario-usuario">
+
+      <!-- ENCABEZADO DEL FORMULARIO -->
+
+      <div class="formulario-encabezado">
+
+        <div class="titulo-formulario">
+
+          <div class="icono-formulario">
+
+            <span class="material-symbols-outlined">
+              {{ modoEdicion ? 'edit' : 'person_add' }}
+            </span>
+
+          </div>
+
+          <div>
+
+            <h2>
+              {{ modoEdicion
+                ? 'Editar usuario'
+                : 'Registrar nuevo usuario'
+              }}
+            </h2>
+
+            <p>
+              {{ modoEdicion
+                ? 'Actualiza la información del usuario.'
+                : 'Ingresa los datos del nuevo usuario.'
+              }}
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="boton-cerrar"
+          title="Cerrar"
+          (click)="cancelarFormulario()">
+
+          <span class="material-symbols-outlined">
+            close
+          </span>
+
+        </button>
+
+      </div>
+
+
+      <!-- CONTENIDO -->
+
+      <div class="formulario-contenido">
+
+        <div class="formulario-grid">
+
+          <!-- USUARIO -->
+
+          <div class="campo">
+
+            <label for="usuario">
+              Usuario
+            </label>
+
+            <input
+              id="usuario"
+              type="text"
+              [(ngModel)]="nuevoUsuario.usuario"
+              placeholder="Ingrese el usuario">
+
+          </div>
+
+
+          <!-- CONTRASEÑA -->
+
+          <div class="campo">
+
+            <label for="password">
+              Contraseña
+            </label>
+
+            <input
+              id="password"
+              type="password"
+              [(ngModel)]="nuevoUsuario.password"
+              [placeholder]="modoEdicion
+                ? 'Dejar vacío para mantener la actual'
+                : 'Ingrese la contraseña'">
+
+          </div>
+
+
+          <!-- NOMBRES -->
+
+          <div class="campo">
+
+            <label for="nombres">
+              Nombres
+            </label>
+
+            <input
+              id="nombres"
+              type="text"
+              [(ngModel)]="nuevoUsuario.nombres"
+              placeholder="Ingrese los nombres">
+
+          </div>
+
+
+          <!-- APELLIDOS -->
+
+          <div class="campo">
+
+            <label for="apellidos">
+              Apellidos
+            </label>
+
+            <input
+              id="apellidos"
+              type="text"
+              [(ngModel)]="nuevoUsuario.apellidos"
+              placeholder="Ingrese los apellidos">
+
+          </div>
+
+
+          <!-- DNI -->
+
+          <div class="campo">
+
+            <label for="dni">
+              DNI
+            </label>
+
+            <input
+              id="dni"
+              type="text"
+              maxlength="8"
+              inputmode="numeric"
+              [(ngModel)]="nuevoUsuario.dni"
+              placeholder="Ingrese 8 dígitos">
+
+          </div>
+
+
+          <!-- TELÉFONO -->
+
+          <div class="campo">
+
+            <label for="telefono">
+              Teléfono
+            </label>
+
+            <input
+              id="telefono"
+              type="text"
+              maxlength="9"
+              inputmode="numeric"
+              [(ngModel)]="nuevoUsuario.telefono"
+              placeholder="Ingrese 9 dígitos">
+
+          </div>
+
+
+          <!-- ROL -->
+
+          <div class="campo">
+
+            <label for="rol">
+              Rol
+            </label>
+
+            <select
+              id="rol"
+              [(ngModel)]="nuevoUsuario.rol">
+
+              <option value="VENDEDOR">
+                VENDEDOR
+              </option>
+
+              <option value="ADMIN">
+                ADMIN
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+        <!-- ACCIONES -->
+
+        <div class="acciones-formulario">
+
+          <button
+            type="button"
+            class="boton-cancelar"
+            (click)="cancelarFormulario()">
+
+            Cancelar
+
+          </button>
+
+
+          <button
+            type="button"
+            class="boton-guardar"
+            (click)="modoEdicion
+              ? actualizarUsuario()
+              : registrarUsuario()">
+
+            <span class="material-symbols-outlined">
+              save
+            </span>
+
+            {{ modoEdicion
+              ? 'Guardar cambios'
+              : 'Registrar usuario'
+            }}
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  }
+
+
+  <!-- CARGANDO -->
+
+  @if (cargando) {
+
+    <div class="mensaje-cargando">
+
+      <span class="material-symbols-outlined">
+        progress_activity
+      </span>
+
+      Cargando usuarios...
+
+    </div>
+
+  }
+
+
+  <!-- LISTA DE USUARIOS -->
+
+  @if (!cargando && !mostrarFormulario) {
+
+    <section class="lista-usuarios">
+
+      <!-- ENCABEZADO DE LA LISTA -->
+
+      <div class="lista-encabezado">
+
+        <div class="lista-titulo">
+
+          <div class="icono-lista">
+
+            <span class="material-symbols-outlined">
+              manage_accounts
+            </span>
+
+          </div>
+
+          <div>
+
+            <h2>
+              Usuarios registrados
+            </h2>
+
+            <p>
+              Usuarios y permisos del sistema
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="contador-usuarios">
+
+          <strong>
+            {{ usuarios.length }}
+          </strong>
+
+          <span>
+            {{ usuarios.length === 1
+              ? 'usuario'
+              : 'usuarios'
+            }}
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- SIN USUARIOS -->
+
+      @if (usuarios.length === 0) {
+
+        <div class="sin-usuarios">
+
+          <span class="material-symbols-outlined">
+            group_off
+          </span>
+
+          <h3>
+            No hay usuarios registrados
+          </h3>
+
+          <p>
+            Registra un usuario para comenzar.
+          </p>
+
+        </div>
+
+      } @else {
+
+
+        <!-- TABLA -->
+
+        <div class="tabla-contenedor">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Usuario
+                </th>
+
+                <th>
+                  Nombres
+                </th>
+
+                <th>
+                  Apellidos
+                </th>
+
+                <th>
+                  DNI
+                </th>
+
+                <th>
+                  Teléfono
+                </th>
+
+                <th>
+                  Rol
+                </th>
+
+                <th>
+                  Estado
+                </th>
+
+                <th>
+                  Acciones
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              @for (
+                usuario of usuarios;
+                track usuario.idUsuario
+              ) {
+
+                <tr>
+
+                  <!-- USUARIO -->
+
+                  <td>
+
+                    <strong>
+                      {{ usuario.usuario }}
+                    </strong>
+
+                  </td>
+
+
+                  <!-- NOMBRES -->
+
+                  <td>
+                    {{ usuario.nombres }}
+                  </td>
+
+
+                  <!-- APELLIDOS -->
+
+                  <td>
+                    {{ usuario.apellidos }}
+                  </td>
+
+
+                  <!-- DNI -->
+
+                  <td>
+                    {{ usuario.dni }}
+                  </td>
+
+
+                  <!-- TELEFONO -->
+
+                  <td>
+                    {{ usuario.telefono || '-' }}
+                  </td>
+
+
+                  <!-- ROL -->
+
+                  <td>
+
+                    @if (usuario.rol === 'ADMIN') {
+
+                      <span class="badge-rol badge-admin">
+                        ADMIN
+                      </span>
+
+                    } @else {
+
+                      <span class="badge-rol badge-vendedor">
+                        VENDEDOR
+                      </span>
+
+                    }
+
+                  </td>
+
+
+                  <!-- ESTADO -->
+
+                  <td>
+
+                    @if (usuario.activo) {
+
+                      <span class="badge-estado badge-activo">
+                        Activo
+                      </span>
+
+                    } @else {
+
+                      <span class="badge-estado badge-inactivo">
+                        Inactivo
+                      </span>
+
+                    }
+
+                  </td>
+
+
+                  <!-- ACCIONES -->
+
+                  <td>
+
+                    <div class="acciones-tabla">
+
+                      <!-- EDITAR -->
+
+                      <button
+                        type="button"
+                        class="boton-accion boton-editar"
+                        title="Editar usuario"
+                        (click)="editarUsuario(usuario)">
+
+                        <span class="material-symbols-outlined">
+                          edit
+                        </span>
+
+                      </button>
+
+
+                      <!-- ACTIVAR / INACTIVAR -->
+
+                  @if (usuario.activo) {
+
+                    <button
+                      type="button"
+                      class="boton-accion boton-inactivar"
+                      title="Inactivar usuario"
+                      (click)="inactivarUsuario(usuario)">
+
+                      <span class="material-symbols-outlined">
+                        person_off
+                      </span>
+
+                    </button>
+
+                  } @else {
+
+                    <button
+                      type="button"
+                      class="boton-accion boton-activar"
+                      title="Activar usuario"
+                      (click)="activarUsuario(usuario)">
+
+                      <span class="material-symbols-outlined">
+                        person_add
+                      </span>
+
+                    </button>
+
+                  }
+
+                    </div>
+
+                  </td>
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+
+        <!-- PIE -->
+
+        <div class="pie-lista">
+
+          Mostrando
+          <strong>&nbsp;{{ usuarios.length }}&nbsp;</strong>
+          {{ usuarios.length === 1
+            ? 'usuario'
+            : 'usuarios'
+          }}
+
+        </div>
+
+      }
+
+    </section>
+
+  }
+
+</div>

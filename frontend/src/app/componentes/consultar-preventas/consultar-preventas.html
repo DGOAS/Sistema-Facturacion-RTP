@@ -1,0 +1,520 @@
+<div class="consultar-preventas">
+
+  <!-- ENCABEZADO -->
+  <header class="encabezado">
+
+    <div class="encabezado-texto">
+      <h1>Lista de Preventas</h1>
+      <p>Consulta de preventas de repuestos automotrices</p>
+    </div>
+
+    <a
+      routerLink="/preventa"
+      class="boton-nueva-preventa">
+
+      <span class="material-symbols-outlined">
+        add
+      </span>
+
+      Nueva preventa
+
+    </a>
+
+  </header>
+
+
+  <!-- RESUMEN -->
+  <section class="resumen">
+
+    <div class="tarjeta-resumen">
+
+      <div class="icono-resumen azul">
+        <span class="material-symbols-outlined">
+          description
+        </span>
+      </div>
+
+      <div>
+        <strong>{{ preventasFiltradas.length }}</strong>
+        <span>Preventas encontradas</span>
+      </div>
+
+    </div>
+
+
+    <div class="tarjeta-resumen">
+
+      <div class="icono-resumen verde">
+        <span class="material-symbols-outlined">
+          task_alt
+        </span>
+      </div>
+
+      <div>
+        <strong>Consulta</strong>
+        <span>Operaciones registradas</span>
+      </div>
+
+    </div>
+
+
+    <div class="tarjeta-resumen">
+
+      <div class="icono-resumen morado">
+        <span class="material-symbols-outlined">
+          search
+        </span>
+      </div>
+
+      <div>
+        <strong>Filtros</strong>
+        <span>Consulta personalizada</span>
+      </div>
+
+    </div>
+
+
+    <div class="tarjeta-resumen">
+
+      <div class="icono-resumen naranja">
+        <span class="material-symbols-outlined">
+          inventory_2
+        </span>
+      </div>
+
+      <div>
+        <strong>RTP</strong>
+        <span>Gestión comercial</span>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- FILTROS -->
+  <section class="filtros">
+
+    <div class="seccion-titulo">
+
+      <div class="icono-seccion">
+        <span class="material-symbols-outlined">
+          search
+        </span>
+      </div>
+
+      <div>
+        <h2>Filtros de búsqueda</h2>
+        <p>Utiliza los filtros para encontrar una preventa específica.</p>
+      </div>
+
+    </div>
+
+
+    <div class="formulario">
+
+      <!-- NÚMERO -->
+      <div class="campo">
+
+        <label for="numero">
+          N.° de preventa
+        </label>
+
+        <div class="campo-input">
+
+          <span class="material-symbols-outlined">
+            description
+          </span>
+
+          <input
+            id="numero"
+            type="text"
+            [(ngModel)]="numeroBusqueda"
+            placeholder="Ej. PV-1033">
+
+        </div>
+
+      </div>
+
+
+      <!-- CLIENTE -->
+      <div class="campo">
+
+        <label for="cliente">
+          Cliente
+        </label>
+
+        <div class="campo-input">
+
+          <span class="material-symbols-outlined">
+            person
+          </span>
+
+          <input
+            id="cliente"
+            type="text"
+            [(ngModel)]="clienteBusqueda"
+            placeholder="Buscar cliente...">
+
+        </div>
+
+      </div>
+
+
+      <!-- FECHA -->
+      <div class="campo">
+
+        <label for="fecha">
+          Fecha
+        </label>
+
+        <div class="campo-input">
+
+          <span class="material-symbols-outlined">
+            calendar_month
+          </span>
+
+          <input
+            id="fecha"
+            type="date"
+            [(ngModel)]="fechaBusqueda">
+
+        </div>
+
+      </div>
+
+
+      <!-- VENDEDOR -->
+      <div class="campo">
+
+        <label for="vendedor">
+          Vendedor
+        </label>
+
+        <div class="campo-input">
+
+          <span class="material-symbols-outlined">
+            badge
+          </span>
+
+          <input
+            id="vendedor"
+            type="text"
+            [(ngModel)]="vendedorBusqueda"
+            placeholder="Buscar vendedor...">
+
+        </div>
+
+      </div>
+
+
+      <!-- ESTADO -->
+      <div class="campo">
+
+        <label for="estado">
+          Estado
+        </label>
+
+        <div class="campo-input">
+
+          <span class="material-symbols-outlined">
+            flag
+          </span>
+
+          <select
+            id="estado"
+            [(ngModel)]="estadoBusqueda">
+
+            <option value="">Todos</option>
+            <option value="REGISTRADA">Registrada</option>
+            <option value="COTIZADA">Cotizada</option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <!-- BOTONES -->
+      <div class="acciones-filtro">
+
+        <button
+          type="button"
+          class="boton-buscar"
+          (click)="buscarPreventas()">
+
+          <span class="material-symbols-outlined">
+            search
+          </span>
+
+          Buscar
+
+        </button>
+
+
+        <button
+          type="button"
+          class="boton-limpiar"
+          (click)="limpiarFiltros()">
+
+          <span class="material-symbols-outlined">
+            filter_alt_off
+          </span>
+
+          Limpiar
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- RESULTADOS -->
+  <section class="resultados">
+
+    <div class="resultados-encabezado">
+
+      <div class="seccion-titulo">
+
+        <div class="icono-seccion">
+          <span class="material-symbols-outlined">
+            format_list_bulleted
+          </span>
+        </div>
+
+        <div>
+
+          <h2>Resultados</h2>
+
+          <p>
+            Se encontraron {{ preventasFiltradas.length }} preventas
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <span class="contador">
+        {{ preventasFiltradas.length }} registros
+      </span>
+
+    </div>
+
+
+    @if (preventasFiltradas.length === 0) {
+
+      <div class="sin-resultados">
+
+        <span class="material-symbols-outlined">
+          search_off
+        </span>
+
+        <h3>No se encontraron preventas</h3>
+
+        <p>
+          No existen registros que coincidan con los filtros seleccionados.
+        </p>
+
+      </div>
+
+    } @else {
+
+      <div class="tabla-contenedor">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>N.° Preventa</th>
+              <th>Fecha</th>
+              <th>Cliente</th>
+              <th>RUC</th>
+              <th>Tipo de venta</th>
+              <th>Vendedor</th>
+              <th>Estado</th>
+              <th>Total US$</th>
+              <th>Acciones</th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            <!-- AQUÍ ESTÁ EL CAMBIO IMPORTANTE -->
+            @for (
+              preventa of preventasPagina;
+              track preventa.idPreventa
+            ) {
+
+              <tr>
+
+                <td>
+                  <span class="numero-preventa">
+                    {{ preventa.numero }}
+                  </span>
+                </td>
+
+
+                <td>
+                  {{ preventa.fecha }}
+                </td>
+
+
+                <td>
+                  <strong class="cliente">
+                    {{ preventa.razonSocial }}
+                  </strong>
+                </td>
+
+
+                <td>
+                  {{ preventa.ruc }}
+                </td>
+
+
+                <td>
+                  <span class="tipo-venta">
+                    {{ preventa.tipoVenta }}
+                  </span>
+                </td>
+
+
+                <td>
+                  {{ preventa.vendedor }}
+                </td>
+
+
+                <td>
+
+                  <span
+                    class="estado-badge"
+                    [class.estado-cotizada]="preventa.estado === 'COTIZADA'"
+                    [class.estado-registrada]="preventa.estado === 'REGISTRADA'">
+
+                    <span class="punto"></span>
+
+                    {{ preventa.estado }}
+
+                  </span>
+
+                </td>
+
+
+                <td class="total">
+                  US$ {{ preventa.totalUsd | number:'1.2-2' }}
+                </td>
+
+
+                <td class="acciones">
+
+                  <a
+                    [routerLink]="[
+                      '/detalle-preventa',
+                      preventa.idPreventa
+                    ]"
+                    class="boton-ver"
+                    title="Ver detalle">
+
+                    <span class="material-symbols-outlined">
+                      visibility
+                    </span>
+
+                  </a>
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <!-- PAGINACIÓN -->
+      <div class="pie-resultados">
+
+        <span class="informacion-resultados">
+
+          Mostrando
+          {{ obtenerInicioResultados() }}
+          -
+          {{ obtenerFinResultados() }}
+          de
+          {{ preventasFiltradas.length }}
+          preventas
+
+        </span>
+
+
+        <div class="paginacion">
+
+          <!-- ANTERIOR -->
+          <button
+            type="button"
+            class="boton-pagina"
+            [disabled]="paginaActual === 1"
+            (click)="paginaAnterior()"
+            title="Página anterior">
+
+            <span class="material-symbols-outlined">
+              chevron_left
+            </span>
+
+          </button>
+
+
+          <!-- NÚMEROS -->
+          @for (
+            pagina of obtenerPaginasVisibles();
+            track pagina
+          ) {
+
+            <button
+              type="button"
+              class="numero-pagina"
+              [class.pagina-activa]="pagina === paginaActual"
+              (click)="irAPagina(pagina)">
+
+              {{ pagina }}
+
+            </button>
+
+          }
+
+
+          <!-- SIGUIENTE -->
+          <button
+            type="button"
+            class="boton-pagina"
+            [disabled]="paginaActual === obtenerTotalPaginas()"
+            (click)="paginaSiguiente()"
+            title="Página siguiente">
+
+            <span class="material-symbols-outlined">
+              chevron_right
+            </span>
+
+          </button>
+
+        </div>
+
+      </div>
+
+    }
+
+  </section>
+
+</div>

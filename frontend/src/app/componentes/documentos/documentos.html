@@ -1,0 +1,519 @@
+<div class="documentos">
+
+  <!-- ENCABEZADO -->
+  <header class="encabezado">
+
+    <div class="encabezado-titulo">
+
+      <div class="icono-encabezado">
+
+        <span class="material-symbols-outlined">
+          folder_copy
+        </span>
+
+      </div>
+
+      <div>
+
+        <h1>Documentos</h1>
+
+        <p>
+          Consulta y descarga de documentos comerciales.
+        </p>
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- CARGANDO -->
+  @if (cargando) {
+
+    <div class="estado-carga">
+
+      <span class="material-symbols-outlined">
+        hourglass_empty
+      </span>
+
+      <h3>
+        Cargando documentos...
+      </h3>
+
+      <p>
+        Espere un momento mientras se cargan los documentos.
+      </p>
+
+    </div>
+
+  } @else {
+
+
+    <!-- FILTROS -->
+    <section class="tarjeta filtros">
+
+      <div class="titulo-seccion">
+
+        <div class="icono-seccion azul">
+
+          <span class="material-symbols-outlined">
+            search
+          </span>
+
+        </div>
+
+        <div>
+
+          <h2>
+            Filtros de búsqueda
+          </h2>
+
+          <p>
+            Utiliza los filtros para encontrar un documento específico.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="formulario-filtros">
+
+
+        <!-- BUSCAR -->
+        <div class="campo campo-busqueda">
+
+          <label for="busqueda">
+            Buscar documento
+          </label>
+
+          <div class="campo-input">
+
+            <span class="material-symbols-outlined">
+              search
+            </span>
+
+            <input
+              id="busqueda"
+              type="text"
+              [(ngModel)]="textoBusqueda"
+              (input)="aplicarFiltros()"
+              placeholder="Número, cliente o RUC"
+            >
+
+          </div>
+
+        </div>
+
+
+        <!-- TIPO -->
+        <div class="campo">
+
+          <label for="tipo">
+            Tipo de documento
+          </label>
+
+          <div class="campo-input select-input">
+
+            <span class="material-symbols-outlined">
+              description
+            </span>
+
+            <select
+              id="tipo"
+              [(ngModel)]="tipoSeleccionado"
+              (change)="cambiarTipo()"
+            >
+
+              <option value="Todos">
+                Todos
+              </option>
+
+              <option value="Preventa">
+                Preventas
+              </option>
+
+              <option value="Cotización">
+                Cotizaciones
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+        <!-- LIMPIAR -->
+        <div class="acciones-filtro">
+
+          <button
+            type="button"
+            class="boton-limpiar"
+            (click)="limpiarFiltros()"
+          >
+
+            <span class="material-symbols-outlined">
+              filter_alt_off
+            </span>
+
+            Limpiar
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- REPOSITORIO -->
+    <section class="tarjeta repositorio">
+
+
+      <!-- ENCABEZADO -->
+      <div class="repositorio-encabezado">
+
+        <div class="titulo-seccion">
+
+          <div class="icono-seccion morado">
+
+            <span class="material-symbols-outlined">
+              folder_open
+            </span>
+
+          </div>
+
+          <div>
+
+            <h2>
+              Repositorio de documentos
+            </h2>
+
+            <p>
+              Consulta rápidamente los documentos comerciales
+              registrados y descarga sus archivos PDF.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <span class="contador">
+
+          {{ documentosFiltrados.length }}
+          documentos
+
+        </span>
+
+      </div>
+
+
+      <!-- SIN RESULTADOS -->
+      @if (documentosFiltrados.length === 0) {
+
+        <div class="sin-documentos">
+
+          <span class="material-symbols-outlined">
+            search_off
+          </span>
+
+          <h3>
+            No se encontraron documentos
+          </h3>
+
+          <p>
+            No existen documentos que coincidan
+            con los filtros seleccionados.
+          </p>
+
+        </div>
+
+      } @else {
+
+
+        <!-- TABLA -->
+        <div class="tabla-contenedor">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Documento
+                </th>
+
+                <th>
+                  Tipo
+                </th>
+
+                <th>
+                  Fecha
+                </th>
+
+                <th>
+                  Cliente
+                </th>
+
+                <th>
+                  Referencia
+                </th>
+
+                <th>
+                  Total US$
+                </th>
+
+                <th>
+                  Acciones
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              @for (
+                documento of documentosPaginados;
+                track documento.tipo + '-' + documento.id
+              ) {
+
+                <tr>
+
+
+                  <!-- DOCUMENTO -->
+                  <td>
+
+                    <span class="numero-documento">
+
+                      {{ documento.numero }}
+
+                    </span>
+
+                  </td>
+
+
+                  <!-- TIPO -->
+                  <td>
+
+                    <span
+                      class="tipo-documento"
+                      [class.tipo-preventa]="documento.tipo === 'Preventa'"
+                      [class.tipo-cotizacion]="documento.tipo === 'Cotización'"
+                    >
+
+                      @if (documento.tipo === 'Preventa') {
+
+                        <span class="material-symbols-outlined">
+                          receipt_long
+                        </span>
+
+                      } @else {
+
+                        <span class="material-symbols-outlined">
+                          request_quote
+                        </span>
+
+                      }
+
+                      {{ documento.tipo }}
+
+                    </span>
+
+                  </td>
+
+
+                  <!-- FECHA -->
+                  <td>
+
+                    {{ documento.fecha }}
+
+                  </td>
+
+
+                  <!-- CLIENTE -->
+                  <td>
+
+                    <strong class="cliente">
+
+                      {{ documento.cliente }}
+
+                    </strong>
+
+                  </td>
+
+
+                  <!-- REFERENCIA -->
+                  <td>
+
+                    <span class="referencia">
+
+                      {{ documento.referencia }}
+
+                    </span>
+
+                  </td>
+
+
+                  <!-- TOTAL -->
+                  <td class="total">
+
+                    US$
+                    {{ documento.totalUsd | number:'1.2-2' }}
+
+                  </td>
+
+
+                  <!-- ACCIONES -->
+                  <td class="acciones">
+
+
+                    <!-- VER -->
+                    <a
+                      class="boton-accion boton-ver"
+                      [routerLink]="obtenerRutaDetalle(documento)"
+                      title="Ver detalle"
+                    >
+
+                      <span class="material-symbols-outlined">
+                        visibility
+                      </span>
+
+                    </a>
+
+
+                    <!-- PDF -->
+                    <button
+                      type="button"
+                      class="boton-accion boton-pdf"
+                      title="Descargar PDF"
+                      (click)="descargarDocumento(documento)"
+                    >
+
+                      <span class="material-symbols-outlined">
+                        picture_as_pdf
+                      </span>
+
+                    </button>
+
+                  </td>
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+
+        <!-- PIE DE RESULTADOS -->
+        <div class="pie-resultados">
+
+
+          <!-- INFORMACIÓN -->
+          <div class="informacion-paginacion">
+
+            Mostrando
+
+            <strong>
+              {{
+                ((paginaActual - 1) * documentosPorPagina) + 1
+              }}
+            </strong>
+
+            -
+
+            <strong>
+              {{ obtenerUltimoDocumento() }}
+            </strong>
+
+            de
+
+            <strong>
+              {{ documentosFiltrados.length }}
+            </strong>
+
+            documentos
+
+          </div>
+
+
+          <!-- PAGINACIÓN -->
+          @if (obtenerTotalPaginas() > 1) {
+
+            <div class="paginacion">
+
+
+              <!-- ANTERIOR -->
+              <button
+                type="button"
+                class="boton-pagina"
+                [disabled]="paginaActual === 1"
+                (click)="paginaAnterior()"
+                aria-label="Página anterior"
+              >
+
+                <span class="material-symbols-outlined">
+                  chevron_left
+                </span>
+
+              </button>
+
+
+              <!-- NÚMEROS -->
+              @for (
+                pagina of obtenerPaginas();
+                track pagina
+              ) {
+
+                <button
+                  type="button"
+                  class="boton-pagina"
+                  [class.activa]="paginaActual === pagina"
+                  (click)="cambiarPagina(pagina)"
+                >
+
+                  {{ pagina }}
+
+                </button>
+
+              }
+
+
+              <!-- SIGUIENTE -->
+              <button
+                type="button"
+                class="boton-pagina"
+                [disabled]="paginaActual === obtenerTotalPaginas()"
+                (click)="paginaSiguiente()"
+                aria-label="Página siguiente"
+              >
+
+                <span class="material-symbols-outlined">
+                  chevron_right
+                </span>
+
+              </button>
+
+            </div>
+
+          }
+
+        </div>
+
+      }
+
+    </section>
+
+  }
+
+</div>

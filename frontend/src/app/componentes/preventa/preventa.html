@@ -1,0 +1,648 @@
+<div class="preventa-wireframe">
+
+  <header>
+    <h1>COMPROMISO DE VENTA</h1>
+    <p>Registro de operación para Compromiso de Venta</p>
+  </header>
+
+
+  <!-- DATOS DE LA OPERACIÓN -->
+  <section class="seccion">
+
+    <h2>Datos de la operación</h2>
+
+    <div class="formulario">
+
+      <div class="campo">
+        <label for="tipoVenta">Tipo de venta *</label>
+
+        <select
+          id="tipoVenta"
+          [(ngModel)]="tipoVenta"
+        >
+          <option value="">Seleccionar tipo de venta</option>
+          <option value="STOCK">Stock</option>
+          <option value="PREVENTA">Pre Venta</option>
+        </select>
+      </div>
+
+
+      <div class="campo">
+        <label for="transporte">Transporte *</label>
+
+        <select
+          id="transporte"
+          [(ngModel)]="transporte"
+        >
+          <option value="">Seleccionar transporte</option>
+          <option value="CAMIONETA_RTP">Camioneta de RTP</option>
+          <option value="AGENCIA">Agencia de Transportes</option>
+          <option value="RETIRO_VENDEDOR">Retiro de Vendedor</option>
+          <option value="RETIRO_CLIENTE">Retiro de Cliente por oficina</option>
+        </select>
+      </div>
+
+
+      <div class="campo">
+        <label for="descuento">Descuento (%)</label>
+
+        <input
+          type="number"
+          id="descuento"
+          [(ngModel)]="descuento"
+          (ngModelChange)="validarDescuento()"
+          min="0"
+          max="10"
+          step="0.5"
+          [disabled]="!puedeAplicarDescuento"
+        />
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- CONDICIONES DE PAGO -->
+  <section class="seccion">
+
+    <h2>Condiciones de Pago</h2>
+
+    <div class="formulario">
+
+      <div class="campo">
+
+        <label for="condicionPago">
+          Condición de pago *
+        </label>
+
+        <select
+          id="condicionPago"
+          [(ngModel)]="condicionPago"
+        >
+          <option value="">Seleccionar condición</option>
+          <option value="CE">C/E - Pago contra entrega</option>
+          <option value="AD">A/D - Adelanto</option>
+          <option value="FACTURA">Factura por cobrar</option>
+          <option value="LETRA">Letra por cobrar</option>
+        </select>
+
+      </div>
+
+
+      @if (condicionPago === 'FACTURA' || condicionPago === 'LETRA') {
+
+        <div class="campo">
+
+          <label for="plazoPago">
+            Plazo *
+          </label>
+
+          <div>
+            <input
+              type="number"
+              id="plazoPago"
+              [(ngModel)]="plazoPago"
+              min="1"
+              step="1"
+              placeholder="Ej. 30"
+            />
+
+            <span>días</span>
+          </div>
+
+        </div>
+
+      }
+
+    </div>
+
+  </section>
+
+
+  <!-- DATOS DE AGENCIA -->
+  @if (transporte === 'AGENCIA') {
+
+    <section class="seccion">
+
+      <h2>Datos de la Agencia de Transporte</h2>
+
+      <div class="formulario">
+
+        <div class="campo">
+
+          <label for="agenciaTransporte">
+            Agencia de Transporte *
+          </label>
+
+          <input
+            type="text"
+            id="agenciaTransporte"
+            [(ngModel)]="agenciaTransporte"
+          />
+
+        </div>
+
+
+        <div class="campo">
+
+          <label for="agenciaRuc">
+            RUC *
+          </label>
+
+          <input
+            type="text"
+            id="agenciaRuc"
+            [(ngModel)]="agenciaRuc"
+          />
+
+        </div>
+
+
+        <div class="campo">
+
+          <label for="agenciaTelefono">
+            Teléfono *
+          </label>
+
+          <input
+            type="text"
+            id="agenciaTelefono"
+            [(ngModel)]="agenciaTelefono"
+          />
+
+        </div>
+
+      </div>
+
+    </section>
+
+  }
+
+
+  <!-- DATOS DEL CLIENTE -->
+
+    <section class="seccion">
+
+      <h2>Datos del cliente</h2>
+
+      <div class="formulario">
+
+        <!-- SELECCIONAR CLIENTE -->
+
+        <div class="campo">
+          <label for="clienteSeleccionado">
+            Cliente *
+          </label>
+
+          <select
+            id="clienteSeleccionado"
+            [(ngModel)]="idCliente"
+            (ngModelChange)="seleccionarCliente()"
+          >
+
+            <option [ngValue]="null">
+              Seleccionar cliente
+            </option>
+
+            @for (clienteItem of clientes; track clienteItem.idCliente) {
+
+              <option [ngValue]="clienteItem.idCliente">
+                {{ clienteItem.ruc }} - {{ clienteItem.razonSocial }}
+              </option>
+
+            }
+
+          </select>
+
+        </div>
+
+
+        <!-- RAZÓN SOCIAL -->
+
+        <div class="campo">
+
+          <label for="cliente">
+            Razón Social
+          </label>
+
+          <input
+            id="cliente"
+            type="text"
+            [(ngModel)]="cliente"
+            readonly
+          />
+
+        </div>
+
+
+        <!-- RUC -->
+
+        <div class="campo">
+
+          <label for="ruc">
+            R.U.C. 
+          </label>
+
+          <input
+            id="ruc"
+            type="text"
+            [(ngModel)]="ruc"
+            readonly
+          />
+
+        </div>
+
+
+        <!-- TELÉFONO -->
+
+        <div class="campo">
+
+          <label for="telefono">
+            Teléfono 
+          </label>
+
+          <input
+            id="telefono"
+            type="text"
+            [(ngModel)]="telefono"
+            readonly
+          />
+
+        </div>
+
+
+        <!-- DIRECCIÓN -->
+
+        <div class="campo">
+
+          <label for="direccion">
+            Dirección
+          </label>
+
+          <input
+            id="direccion"
+            type="text"
+            [(ngModel)]="direccion"
+            readonly
+          />
+
+        </div>
+
+
+        <!-- URBANIZACIÓN -->
+
+        <div class="campo">
+
+          <label for="urbanizacion">
+            Urbanización
+          </label>
+
+          <input
+            id="urbanizacion"
+            type="text"
+            [(ngModel)]="urbanizacion"
+            readonly
+          />
+
+        </div>
+
+
+        <!-- DISTRITO -->
+
+        <div class="campo">
+
+          <label for="distrito">
+            Distrito
+          </label>
+
+          <input
+            id="distrito"
+            type="text"
+            [(ngModel)]="distrito"
+            readonly
+          />
+
+        </div>
+
+      </div>
+
+    </section>
+
+  <!-- REPUESTOS -->
+  <section class="seccion">
+
+    <h2>Repuestos</h2>
+
+    <div class="formulario">
+
+      <div class="campo">
+
+        <label for="repuesto">
+          Repuesto *
+        </label>
+
+        <select
+          id="repuesto"
+          [(ngModel)]="repuestoSeleccionado"
+        >
+
+          <option [ngValue]="null">
+            Seleccionar repuesto
+          </option>
+
+          @for (repuesto of repuestosDisponibles; track repuesto.codigo) {
+
+            <option [ngValue]="repuesto">
+              {{ repuesto.codigo }} - {{ repuesto.nombre }}
+            </option>
+
+          }
+
+        </select>
+
+      </div>
+
+
+      <div class="campo">
+
+        <label for="cantidad">
+          Cantidad *
+        </label>
+
+        <input
+          type="number"
+          id="cantidad"
+          [(ngModel)]="cantidad"
+          min="1"
+        />
+
+      </div>
+
+
+      <div class="campo">
+
+        <label>
+          Precio unitario
+        </label>
+
+        @if (repuestoSeleccionado) {
+
+          <p>
+            USD {{ repuestoSeleccionado.precioUSD.toFixed(2) }}
+          </p>
+
+        } @else {
+
+          <p>
+            Se obtiene del catálogo de repuestos
+          </p>
+
+        }
+
+      </div>
+
+    </div>
+
+
+    <button
+      type="button"
+      (click)="agregarRepuesto()"
+    >
+      Agregar repuesto
+    </button>
+
+  </section>
+
+
+  <!-- DETALLE DE REPUESTOS -->
+  <section class="seccion">
+
+    <h2>Detalle de repuestos</h2>
+
+    <table>
+
+      <thead>
+
+        <tr>
+          <th>Código</th>
+          <th>Repuesto</th>
+          <th>Descripción</th>
+          <th>Cantidad</th>
+          <th>Precio unitario</th>
+          <th>Total</th>
+          <th>Acciones</th>
+        </tr>
+
+      </thead>
+
+
+      <tbody>
+
+        @if (repuestosAgregados.length === 0) {
+
+          <tr>
+            <td colspan="7">
+              No hay repuestos agregados.
+            </td>
+          </tr>
+
+        }
+
+
+        @for (repuesto of repuestosAgregados; track repuesto.codigo) {
+
+          <tr>
+
+            <td>
+              {{ repuesto.codigo }}
+            </td>
+
+            <td>
+              {{ repuesto.nombre }}
+            </td>
+
+            <td>
+              {{ repuesto.descripcion }}
+            </td>
+
+            <td>
+              {{ repuesto.cantidad }}
+            </td>
+
+            <td>
+              USD {{ repuesto.precioUnitario.toFixed(2) }}
+            </td>
+
+            <td>
+              USD {{ repuesto.total.toFixed(2) }}
+            </td>
+
+
+            <td>
+              <button
+                type="button"
+                (click)="eliminarRepuesto(repuesto.codigo)"
+              >
+                Eliminar
+              </button>
+            </td>
+            
+          </tr>
+
+        }
+
+      </tbody>
+
+    </table>
+
+  </section>
+
+
+  <!-- RECEPCIÓN -->
+  <section class="seccion">
+
+    <h2>Recepción</h2>
+
+    <div class="formulario">
+
+      <div class="campo">
+
+        <label for="representanteCliente">
+          Representante del Cliente (Autorizado)
+        </label>
+
+        <input
+          type="text"
+          id="representanteCliente"
+          [(ngModel)]="representanteCliente"
+        />
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- RESUMEN FINANCIERO -->
+  <!-- RESUMEN FINANCIERO -->
+<section class="seccion resumen">
+  <h2>Resumen financiero</h2>
+
+  <div class="fila-resumen">
+    <span>Subtotal:</span>
+    <strong>USD {{ subtotal.toFixed(2) }}</strong>
+  </div>
+
+  <div class="fila-resumen">
+    <span>Descuento:</span>
+    <strong>{{ descuento.toFixed(2) }}%</strong>
+  </div>
+
+  <div class="fila-resumen">
+    <span>Monto descontado:</span>
+    <strong>USD {{ descuentoMonto.toFixed(2) }}</strong>
+  </div>
+
+  <div class="fila-resumen">
+    <span>NETO:</span>
+    <strong>USD {{ baseConDescuento.toFixed(2) }}</strong>
+  </div>
+
+  <div class="fila-resumen">
+    <span>IGV:</span>
+    <strong>USD {{ igv.toFixed(2) }}</strong>
+  </div>
+
+  <hr>
+
+  <div class="fila-resumen total">
+    <span>TOTAL:</span>
+    <strong>USD {{ total.toFixed(2) }}</strong>
+  </div>
+</section>
+
+
+  <!-- CONSULTA OPCIONAL EN SOLES -->
+  <section class="seccion">
+
+    <h2>Consulta opcional en soles</h2>
+
+    <p>
+      Esta información es solo referencial para el trabajador
+      y no forma parte del Compromiso de Venta.
+    </p>
+
+
+    <div class="formulario">
+
+      <div class="campo">
+
+        <label for="tipoCambio">
+          Tipo de cambio
+        </label>
+
+        <input
+          type="number"
+          id="tipoCambio"
+          [(ngModel)]="tipoCambio"
+          placeholder="3.40"
+          min="0"
+          step="0.0001"
+        />
+
+      </div>
+
+
+      @if (tipoCambio > 0) {
+
+        <div class="campo">
+
+          <label>
+            Total en USD
+          </label>
+
+          <p>
+            USD {{ total.toFixed(2) }}
+          </p>
+
+        </div>
+
+
+        <div class="campo">
+
+          <label>
+            Equivalente en PEN
+          </label>
+
+          <p>
+            S/ {{ (total * tipoCambio).toFixed(2) }}
+          </p>
+
+        </div>
+
+      }
+
+    </div>
+
+  </section>
+
+
+  <!-- ACCIONES -->
+  <section class="acciones">
+
+    <button
+      type="button"
+      (click)="registrarPreventa()"
+    >
+     Generar Compromiso de Venta
+    </button>
+
+    <button type="button">
+      Cancelar
+    </button>
+
+  </section>
+
+</div>

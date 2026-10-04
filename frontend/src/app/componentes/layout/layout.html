@@ -1,0 +1,369 @@
+<div class="layout">
+
+  <!-- BARRA SUPERIOR -->
+
+  <header class="navbar">
+
+    <!-- LOGO -->
+    <div class="navbar-logo">
+
+      <div class="logo-icono">
+        <span class="material-symbols-outlined">settings</span>
+      </div>
+
+      <div class="logo-texto">
+        <strong>RTP</strong>
+        <span>REPUESTOS</span>
+      </div>
+
+    </div>
+
+
+    <!-- BUSCADOR -->
+    <div class="buscador">
+
+      <span class="material-symbols-outlined">
+        search
+      </span>
+
+      <input
+        type="text"
+        placeholder="Buscar repuestos, clientes o documentos...">
+
+    </div>
+
+
+    <!-- INFORMACIÓN DEL USUARIO -->
+    <details class="usuario-menu">
+
+      <summary class="usuario-resumen">
+
+        <div class="usuario-avatar">
+          <span class="material-symbols-outlined">
+            person
+          </span>
+        </div>
+
+        <div class="usuario-datos">
+
+          <strong>{{ usuario }}</strong>
+
+          <span>
+            {{ esAdministrador ? 'Administrador' : 'Usuario' }}
+          </span>
+
+        </div>
+
+        <span class="material-symbols-outlined usuario-flecha">
+          expand_more
+        </span>
+
+      </summary>
+
+
+      <!-- MENÚ DESPLEGABLE -->
+      <div class="usuario-dropdown">
+
+        <div class="usuario-dropdown-info">
+
+          <div class="usuario-avatar grande">
+            <span class="material-symbols-outlined">
+              person
+            </span>
+          </div>
+
+          <div>
+            <strong>{{ usuario }}</strong>
+
+            <span>
+              {{ esAdministrador ? 'Administrador' : 'Usuario' }}
+            </span>
+          </div>
+
+        </div>
+
+        <div class="dropdown-separador"></div>
+
+        
+        <button
+          type="button"
+          class="dropdown-opcion boton-logout"
+          (click)="cerrarSesion()">
+
+          <span class="material-symbols-outlined">
+            logout
+          </span>
+
+          Cerrar sesión
+
+        </button>
+
+      </div>
+
+    </details>
+
+  </header>
+
+  <!-- CUERPO PRINCIPAL -->
+
+  <div class="contenido-layout">
+
+    <!-- MENÚ LATERAL -->
+
+    <aside class="sidebar">
+
+
+      <!-- MENÚ -->
+      <nav class="menu-principal">
+
+
+        <!-- INICIO -->
+        <a
+          routerLink="/inicio"
+          routerLinkActive="activo"
+          [routerLinkActiveOptions]="{ exact: true }">
+
+          <span class="material-symbols-outlined">
+            home
+          </span>
+
+          <span>Inicio</span>
+
+        </a>
+
+
+        <!-- DASHBOARD -->
+        <a
+          routerLink="/dashboard"
+          routerLinkActive="activo">
+
+          <span class="material-symbols-outlined">
+            dashboard
+          </span>
+
+          <span>Dashboard</span>
+
+        </a>
+
+
+        <!-- CLIENTES -->
+        <a
+          routerLink="/clientes"
+          routerLinkActive="activo">
+
+          <span class="material-symbols-outlined">
+            people
+          </span>
+
+          <span>Clientes</span>
+
+        </a>
+
+
+        <!-- PRODUCTOS -->
+        <a
+          routerLink="/productos"
+          routerLinkActive="activo">
+
+          <span class="material-symbols-outlined">
+            inventory_2
+          </span>
+
+          <span>Productos</span>
+
+        </a>
+
+
+        <!-- PREVENTAS -->
+
+        <div
+          class="menu-seccion"
+          routerLinkActive
+          #preventasSection="routerLinkActive">
+
+          <a
+            routerLink="/preventa"
+            routerLinkActive="activo">
+
+            <span class="material-symbols-outlined">
+              description
+            </span>
+
+            <span>Preventas</span>
+
+            <span class="material-symbols-outlined menu-flecha">
+              expand_more
+            </span>
+
+          </a>
+
+
+          @if (preventasSection.isActive) {
+
+            <div class="submenu">
+
+              <a
+                routerLink="/preventa"
+                routerLinkActive="activo-submenu">
+
+                <span class="material-symbols-outlined">
+                  add_circle
+                </span>
+
+                Nueva preventa
+
+              </a>
+
+
+              <a
+                routerLink="/consultar-preventas"
+                routerLinkActive="activo-submenu">
+
+                <span class="material-symbols-outlined">
+                  list_alt
+                </span>
+
+                Lista de preventas
+
+              </a>
+
+            </div>
+
+          }
+
+        </div>
+
+        <!-- COTIZACIONES -->
+
+        <a
+          routerLink="/consultar-cotizaciones"
+          routerLinkActive="activo">
+
+          <span class="material-symbols-outlined">
+            request_quote
+          </span>
+
+          <span>Cotizaciones</span>
+
+        </a>
+
+
+        <!-- DOCUMENTOS -->
+        <a
+          routerLink="/documentos"
+          routerLinkActive="activo">
+
+          <span class="material-symbols-outlined">
+            folder
+          </span>
+
+          <span>Documentos</span>
+
+        </a>
+
+
+        <!-- USUARIOS -->
+
+        <div
+              class="menu-seccion"
+              routerLinkActive
+              #usuariosSection="routerLinkActive">
+
+              <a
+                routerLink="/usuarios"
+                routerLinkActive="activo">
+
+                <span class="material-symbols-outlined">
+                  group
+                </span>
+
+                <span>Usuarios</span>
+
+                <span class="material-symbols-outlined menu-flecha">
+                  expand_more
+                </span>
+
+              </a>
+
+
+              @if (usuariosSection.isActive) {
+
+                <div class="submenu">
+
+                  <a
+                    routerLink="/usuarios"
+                    routerLinkActive="activo-submenu">
+
+                    <span class="material-symbols-outlined">
+                      person
+                    </span>
+
+                    Mi perfil
+
+                  </a>
+
+
+                  @if (esAdministrador) {
+
+                    <a
+                      routerLink="/administrador"
+                      routerLinkActive="activo-submenu">
+
+                      <span class="material-symbols-outlined">
+                        admin_panel_settings
+                      </span>
+
+                      Administrador
+
+                    </a>
+
+                  }
+
+                </div>
+
+              }
+
+          </div>
+
+      </nav>
+
+
+      <!-- TARJETA PROMOCIONAL -->
+
+      <div class="tarjeta-promocional">
+
+        <div class="promocional-imagen">
+
+          <img
+          src="/respuestos-rtp.png"
+          alt="Repuestos RTP">
+
+        </div>
+
+        <div class="promocional-contenido">
+
+          <strong>Repuestos Originales</strong>
+
+          <span>
+            Calidad y respaldo para tu vehículo
+          </span>
+
+        </div>
+
+      </div>
+
+    </aside>
+
+
+    <!-- CONTENIDO DE LAS PÁGINAS -->
+
+
+    <main class="contenido">
+
+      <router-outlet></router-outlet>
+
+    </main>
+
+  </div>
+
+</div>

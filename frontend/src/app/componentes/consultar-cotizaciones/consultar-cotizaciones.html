@@ -1,0 +1,536 @@
+<div class="consultar-cotizaciones">
+
+  <!-- ENCABEZADO -->
+  <header class="encabezado">
+
+    <div class="encabezado-texto">
+
+      <h1>Consultar Cotizaciones</h1>
+
+      <p>
+        Consulta de cotizaciones de repuestos automotrices
+      </p>
+
+    </div>
+
+    <a
+      routerLink="/preventa"
+      class="boton-nueva-cotizacion">
+
+      <span class="material-symbols-outlined">
+        add
+      </span>
+
+      Nueva cotización
+
+    </a>
+
+  </header>
+
+
+  <!-- TARJETAS DE RESUMEN -->
+  <section class="resumen">
+
+    <!-- TOTAL -->
+    <div class="tarjeta-resumen">
+
+      <div class="icono-resumen azul">
+
+        <span class="material-symbols-outlined">
+          description
+        </span>
+
+      </div>
+
+      <div>
+
+        <strong>
+          {{ cotizacionesFiltradas.length }}
+        </strong>
+
+        <span>
+          Cotizaciones encontradas
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- CONSULTA -->
+    <div class="tarjeta-resumen">
+
+      <div class="icono-resumen verde">
+
+        <span class="material-symbols-outlined">
+          task_alt
+        </span>
+
+      </div>
+
+      <div>
+
+        <strong>
+          Consulta
+        </strong>
+
+        <span>
+          Operaciones registradas
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- FILTROS -->
+    <div class="tarjeta-resumen">
+
+      <div class="icono-resumen morado">
+
+        <span class="material-symbols-outlined">
+          search
+        </span>
+
+      </div>
+
+      <div>
+
+        <strong>
+          Filtros
+        </strong>
+
+        <span>
+          Consulta personalizada
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- RTP -->
+    <div class="tarjeta-resumen">
+
+      <div class="icono-resumen naranja">
+
+        <span class="material-symbols-outlined">
+          inventory_2
+        </span>
+
+      </div>
+
+      <div>
+
+        <strong>
+          RTP
+        </strong>
+
+        <span>
+          Gestión comercial
+        </span>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- FILTROS -->
+  <section class="filtros">
+
+    <div class="seccion-titulo">
+
+      <div class="icono-seccion">
+
+        <span class="material-symbols-outlined">
+          search
+        </span>
+
+      </div>
+
+      <div>
+
+        <h2>
+          Filtros de búsqueda
+        </h2>
+
+        <p>
+          Utiliza los filtros para encontrar una cotización específica.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="formulario">
+
+      <!-- NÚMERO -->
+      <div class="campo">
+
+        <label for="numero">
+          N.° de cotización
+        </label>
+
+        <div class="campo-input">
+
+          <span class="material-symbols-outlined">
+            description
+          </span>
+
+          <input
+            id="numero"
+            type="text"
+            [(ngModel)]="numeroBusqueda"
+            placeholder="Ej. COT-013">
+
+        </div>
+
+      </div>
+
+
+      <!-- CLIENTE -->
+      <div class="campo">
+
+        <label for="cliente">
+          Cliente
+        </label>
+
+        <div class="campo-input">
+
+          <span class="material-symbols-outlined">
+            person
+          </span>
+
+          <input
+            id="cliente"
+            type="text"
+            [(ngModel)]="clienteBusqueda"
+            placeholder="Buscar cliente...">
+
+        </div>
+
+      </div>
+
+
+      <!-- FECHA -->
+      <div class="campo">
+
+        <label for="fecha">
+          Fecha
+        </label>
+
+        <div class="campo-input">
+
+          <span class="material-symbols-outlined">
+            calendar_month
+          </span>
+
+          <input
+            id="fecha"
+            type="date"
+            [(ngModel)]="fechaBusqueda">
+
+        </div>
+
+      </div>
+
+
+      <!-- BOTONES -->
+      <div class="acciones-filtro">
+
+        <button
+          type="button"
+          class="boton-buscar"
+          (click)="filtrarCotizaciones()">
+
+          <span class="material-symbols-outlined">
+            search
+          </span>
+
+          Buscar
+
+        </button>
+
+
+        <button
+          type="button"
+          class="boton-limpiar"
+          (click)="limpiarFiltros()">
+
+          <span class="material-symbols-outlined">
+            filter_alt_off
+          </span>
+
+          Limpiar
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- RESULTADOS -->
+  <section class="resultados">
+
+    <div class="resultados-encabezado">
+
+      <div class="seccion-titulo">
+
+        <div class="icono-seccion">
+
+          <span class="material-symbols-outlined">
+            format_list_bulleted
+          </span>
+
+        </div>
+
+        <div>
+
+          <h2>
+            Resultados
+          </h2>
+
+          <p>
+            Se encontraron
+            {{ cotizacionesFiltradas.length }}
+            cotizaciones
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <span class="contador">
+
+        {{ cotizacionesFiltradas.length }}
+        registros
+
+      </span>
+
+    </div>
+
+
+    <!-- SIN RESULTADOS -->
+    @if (cotizacionesFiltradas.length === 0) {
+
+      <div class="sin-resultados">
+
+        <span class="material-symbols-outlined">
+          search_off
+        </span>
+
+        <h3>
+          No se encontraron cotizaciones
+        </h3>
+
+        <p>
+          No existen registros que coincidan
+          con los filtros seleccionados.
+        </p>
+
+      </div>
+
+    } @else {
+
+      <!-- TABLA -->
+      <div class="tabla-contenedor">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                N.° Cotización
+              </th>
+
+              <th>
+                Fecha
+              </th>
+
+              <th>
+                Cliente
+              </th>
+
+              <th>
+                Documento
+              </th>
+
+              <th>
+                Total US$
+              </th>
+
+              <th>
+                Acciones
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            @for (
+              cotizacion of cotizacionesPaginadas;
+              track cotizacion.idCotizacion
+            ) {
+
+              <tr>
+
+                <td>
+
+                  <span class="numero-cotizacion">
+
+                    {{ cotizacion.numero }}
+
+                  </span>
+
+                </td>
+
+
+                <td>
+                  {{ cotizacion.fecha }}
+                </td>
+
+
+                <td>
+
+                  <strong class="cliente">
+
+                    {{ cotizacion.preventa.razonSocial }}
+
+                  </strong>
+
+                </td>
+
+
+                <td>
+                  {{ cotizacion.preventa.ruc }}
+                </td>
+
+
+                <td class="total">
+
+                  US$
+                  {{ cotizacion.totalUsd | number:'1.2-2' }}
+
+                </td>
+
+
+                <td class="acciones">
+
+                  <a
+                    [routerLink]="[
+                      '/detalle-cotizacion',
+                      cotizacion.idCotizacion
+                    ]"
+                    class="boton-ver"
+                    title="Ver detalle">
+
+                    <span class="material-symbols-outlined">
+                      visibility
+                    </span>
+
+                  </a>
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <!-- PIE + PAGINACIÓN -->
+      <div class="pie-resultados">
+
+        <span>
+
+          Mostrando
+          {{ indiceInicio }}
+          -
+          {{ indiceFin }}
+          de
+          {{ cotizacionesFiltradas.length }}
+          cotizaciones
+
+        </span>
+
+
+        @if (totalPaginas > 1) {
+
+          <div class="paginacion">
+
+            <!-- ANTERIOR -->
+            <button
+              type="button"
+              class="boton-pagina"
+              [disabled]="paginaActual === 1"
+              (click)="paginaAnterior()"
+              aria-label="Página anterior">
+
+              <span class="material-symbols-outlined">
+                chevron_left
+              </span>
+
+            </button>
+
+
+            <!-- NÚMEROS -->
+            @for (
+              pagina of paginas;
+              track pagina
+            ) {
+
+              <button
+                type="button"
+                class="boton-pagina"
+                [class.activa]="paginaActual === pagina"
+                (click)="cambiarPagina(pagina)">
+
+                {{ pagina }}
+
+              </button>
+
+            }
+
+
+            <!-- SIGUIENTE -->
+            <button
+              type="button"
+              class="boton-pagina"
+              [disabled]="paginaActual === totalPaginas"
+              (click)="paginaSiguiente()"
+              aria-label="Página siguiente">
+
+              <span class="material-symbols-outlined">
+                chevron_right
+              </span>
+
+            </button>
+
+          </div>
+
+        }
+
+      </div>
+
+    }
+
+  </section>
+
+</div>

@@ -1,0 +1,451 @@
+<div class="detalle-preventa">
+
+  <!-- ENCABEZADO -->
+  <header class="encabezado">
+
+    <div class="encabezado-principal">
+
+      <div class="titulo-bloque">
+
+        <div class="icono-titulo">
+          <span class="material-symbols-outlined">
+            description
+          </span>
+        </div>
+
+        <div>
+          <h1>Detalle de Preventa</h1>
+          <p>Consulta de información de la preventa y sus productos.</p>
+        </div>
+
+      </div>
+
+
+      @if (preventa) {
+
+        <a
+          routerLink="/consultar-preventas"
+          class="boton-volver">
+
+          <span class="material-symbols-outlined">
+            arrow_back
+          </span>
+
+          Volver
+
+        </a>
+
+      }
+
+    </div>
+
+  </header>
+
+
+  @if (preventa) {
+
+    <!-- INFORMACIÓN GENERAL -->
+    <section class="seccion">
+
+      <div class="titulo-seccion">
+
+        <div class="icono-seccion azul">
+          <span class="material-symbols-outlined">
+            info
+          </span>
+        </div>
+
+        <div>
+          <h2>Información general</h2>
+          <p>Datos principales de la operación comercial.</p>
+        </div>
+
+      </div>
+
+
+      <div class="datos-generales">
+
+        <div class="dato">
+          <span class="etiqueta">N.° de preventa</span>
+          <strong class="numero-preventa">
+            {{ preventa.numero }}
+          </strong>
+        </div>
+
+
+        <div class="dato">
+          <span class="etiqueta">Fecha</span>
+          <strong>
+            {{ preventa.fecha }}
+          </strong>
+        </div>
+
+
+        <div class="dato">
+          <span class="etiqueta">Tipo de venta</span>
+
+          <span class="badge-tipo">
+            {{ preventa.tipoVenta }}
+          </span>
+        </div>
+
+
+        <div class="dato">
+          <span class="etiqueta">Condición de pago</span>
+          <strong>
+            {{ preventa.condicionPago }}
+          </strong>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- DATOS DEL CLIENTE -->
+    <section class="seccion">
+
+      <div class="titulo-seccion">
+
+        <div class="icono-seccion verde">
+          <span class="material-symbols-outlined">
+            person
+          </span>
+        </div>
+
+        <div>
+          <h2>Datos del cliente</h2>
+          <p>Información registrada del cliente asociado a la preventa.</p>
+        </div>
+
+      </div>
+
+
+      <div class="datos-cliente">
+
+        <div class="dato">
+          <span class="etiqueta">Razón social</span>
+          <strong>
+            {{ preventa.razonSocial }}
+          </strong>
+        </div>
+
+
+        <div class="dato">
+          <span class="etiqueta">R.U.C.</span>
+          <strong>
+            {{ preventa.ruc }}
+          </strong>
+        </div>
+
+
+        <div class="dato">
+          <span class="etiqueta">Teléfono</span>
+          <strong>
+            {{ preventa.telefono || '—' }}
+          </strong>
+        </div>
+
+
+        <div class="dato">
+          <span class="etiqueta">Distrito</span>
+          <strong>
+            {{ preventa.distrito || '—' }}
+          </strong>
+        </div>
+
+
+        <div class="dato dato-ancho">
+          <span class="etiqueta">Dirección</span>
+          <strong>
+            {{ preventa.direccion || '—' }}
+          </strong>
+        </div>
+
+
+        <div class="dato">
+          <span class="etiqueta">Urbanización</span>
+          <strong>
+            {{ preventa.urbanizacion || '—' }}
+          </strong>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- PRODUCTOS -->
+    <section class="seccion productos-seccion">
+
+      <div class="titulo-seccion">
+
+        <div class="icono-seccion morado">
+          <span class="material-symbols-outlined">
+            inventory_2
+          </span>
+        </div>
+
+        <div>
+          <h2>Productos</h2>
+          <p>Detalle de los repuestos incluidos en la preventa.</p>
+        </div>
+
+      </div>
+
+
+      <div class="tabla-contenedor">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Código</th>
+              <th>Producto</th>
+              <th>Descripción</th>
+              <th>Cantidad</th>
+              <th>Precio unitario</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+
+
+          <tbody>
+
+            @for (
+              detalle of preventa.detalles;
+              track detalle.idDetalle;
+              let i = $index
+            ) {
+
+              <tr>
+
+                <td class="numero-fila">
+                  {{ i + 1 }}
+                </td>
+
+                <td>
+                  <strong class="codigo">
+                    {{ detalle.producto.codigo }}
+                  </strong>
+                </td>
+
+                <td>
+                  <strong>
+                    {{ detalle.producto.nombre }}
+                  </strong>
+                </td>
+
+                <td class="descripcion">
+                  {{ detalle.producto.descripcion }}
+                </td>
+
+                <td class="cantidad">
+                  {{ detalle.cantidad }}
+                </td>
+
+                <td class="precio">
+                  US$ {{ detalle.precioUnitarioUsd | number:'1.2-2' }}
+                </td>
+
+                <td class="precio total-producto">
+                  US$ {{ detalle.totalUsd | number:'1.2-2' }}
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <div class="total-productos">
+
+        <span>
+          Subtotal de productos
+        </span>
+
+        <strong>
+          US$ {{ preventa.subtotalUsd | number:'1.2-2' }}
+        </strong>
+
+      </div>
+
+    </section>
+
+
+    <!-- PARTE INFERIOR -->
+    <div class="zona-inferior">
+
+
+      <!-- INFORMACIÓN ADICIONAL -->
+      <section class="seccion informacion-adicional">
+
+        <div class="titulo-seccion">
+
+          <div class="icono-seccion naranja">
+            <span class="material-symbols-outlined">
+              local_shipping
+            </span>
+          </div>
+
+          <div>
+            <h2>Información adicional</h2>
+            <p>Datos complementarios de la operación.</p>
+          </div>
+
+        </div>
+
+
+        <div class="datos-adicionales">
+
+          <div class="dato">
+            <span class="etiqueta">Transporte</span>
+            <strong>
+              {{ preventa.transporte || '—' }}
+            </strong>
+          </div>
+
+
+          <div class="dato">
+            <span class="etiqueta">Plazo de pago</span>
+            <strong>
+              @if (preventa.plazoPago !== null) {
+                {{ preventa.plazoPago }} días
+              } @else {
+                —
+              }
+            </strong>
+          </div>
+
+
+          <div class="dato">
+            <span class="etiqueta">Representante del cliente</span>
+            <strong>
+              {{ preventa.representanteCliente || '—' }}
+            </strong>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- RESUMEN FINANCIERO -->
+      <section class="resumen">
+
+        <div class="titulo-seccion">
+
+          <div class="icono-seccion azul">
+            <span class="material-symbols-outlined">
+              calculate
+            </span>
+          </div>
+
+          <div>
+            <h2>Resumen financiero</h2>
+            <p>Detalle de los importes de la operación.</p>
+          </div>
+
+        </div>
+
+
+        <div class="fila-resumen">
+          <span>Moneda</span>
+          <strong>USD (US$)</strong>
+        </div>
+
+
+        <div class="fila-resumen">
+          <span>Subtotal</span>
+          <strong>
+            US$ {{ preventa.subtotalUsd | number:'1.2-2' }}
+          </strong>
+        </div>
+
+
+        <div class="fila-resumen">
+          <span>
+            Descuento
+            <small>({{ preventa.descuentoPorcentaje | number:'1.0-2' }}%)</small>
+          </span>
+
+          <strong>
+            US$ {{ preventa.descuentoUsd | number:'1.2-2' }}
+          </strong>
+        </div>
+
+
+        <div class="fila-resumen">
+          <span>Neto</span>
+          <strong>
+            US$ {{ preventa.netoUsd | number:'1.2-2' }}
+          </strong>
+        </div>
+
+
+        <div class="fila-resumen">
+          <span>IGV (18%)</span>
+          <strong>
+            US$ {{ preventa.igvUsd | number:'1.2-2' }}
+          </strong>
+        </div>
+
+
+        <div class="separador"></div>
+
+
+        <div class="fila-total">
+
+          <span>TOTAL</span>
+
+          <strong>
+            US$ {{ preventa.totalUsd | number:'1.2-2' }}
+          </strong>
+
+        </div>
+
+      </section>
+
+    </div>
+
+
+    <!-- ACCIONES -->
+    <section class="acciones">
+
+      <a
+        [routerLink]="['/cotizacion', preventa.idPreventa]"
+        class="boton-principal">
+
+        <span class="material-symbols-outlined">
+          request_quote
+        </span>
+
+        Generar cotización
+
+      </a>
+
+
+      <button
+        type="button"
+        class="boton-secundario"
+        (click)="descargarPdf()">
+
+        <span class="material-symbols-outlined">
+          picture_as_pdf
+        </span>
+
+        Descargar PDF
+
+      </button>
+
+    </section>
+
+  }
+
+</div>
